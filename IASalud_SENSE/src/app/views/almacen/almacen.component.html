@@ -1,0 +1,32 @@
+<p>almacen works!</p>
+<button class="btn btn-primary" (click)="obtenerHospitales()" >Peticion GET</button>
+
+<button class="btn btn-primary" (click)="aniadirHospital()" >Peticion POST</button>
+
+<button class="btn btn-danger" (click)="editarHospital()">Peticion PUT</button>
+
+<button class="btn btn-warning" (click)="eliminarHospital()">Peticion DELETE</button>
+
+<button class="btn btn-primary" (click)="pruebaThingsboard()" >Thingsboard</button>
+
+<div>
+  <h1>HOSPITALES</h1>
+    <div *ngFor="let hospital of hospitales" class="col-md-4">
+    <!-- <div> -->
+      <div class="card">
+        <div class="card-body">
+        <!--
+          <h3>Nombre</h3>
+          <h4>ID</h4>
+          <p>direccion completa del hospital</p>
+          <p>num Boxes</p>
+        -->
+          <h3>{{ hospital.nombre }}</h3>
+          <h4>{{hospital.id}}</h4>
+          <p>{{ hospital.direccion }}</p>
+          <p>{{ hospital.numBoxes }}</p>
+         
+        </div>
+      </div>
+    </div>
+</div>

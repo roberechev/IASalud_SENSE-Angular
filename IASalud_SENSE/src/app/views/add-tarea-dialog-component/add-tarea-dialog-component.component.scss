@@ -1,0 +1,24 @@
+.container {
+    max-width: 600px; /* Tamaño máximo ajustable según tus necesidades */
+    margin: auto; /* Centra el contenedor horizontalmente */
+}
+
+h2 {
+    margin-top: 20px; /* Espacio superior para separar el título del borde superior */
+    margin-bottom: 20px; /* Espacio inferior para separar el título del resto del contenido */
+}
+
+/* Opcional: Estilo para los botones */
+.btn {
+    min-width: 120px; /* Ancho mínimo ajustable según tus necesidades */
+}
+/*
+.customDialogAddTarea {
+    border: 2px solid red !important;
+    border-radius: 10px !important;
+    .mat-dialog-container {
+      border: 2px solid green !important; 
+      border-radius: 10px !important;
+    }
+}
+*/

@@ -1,0 +1,116 @@
+.custom-card {
+  border: 4px solid purple; /* Borde morado más grueso */
+  margin: 2%; /* Espacio alrededor de la card */
+  border-radius: 20px;
+}
+
+.inner-card {
+margin-top: 2%; /* Espacio entre las secciones internas */
+border: 2px solid purple; /* Borde de las secciones internas */
+border-radius: 40px;
+}
+.inner-card {
+  margin-top: 2%; /* Espacio entre las secciones internas */
+  border: 2px solid purple; /* Borde de las secciones internas */
+  border-radius: 40px;
+  overflow: auto; /* Agrega esta línea para controlar el desbordamiento */
+}
+
+.inner-card-body {
+display: flex;
+justify-content: space-between; /* Para separar los elementos a los extremos */
+}
+
+.inner-card-body h3 {
+margin: 0; /* Elimina el margen predeterminado del h3 */
+}
+
+.inner-card-body h4 {
+margin: 0; /* Elimina el margen predeterminado del h4 */
+}
+
+
+/*
+--------------------------------
+  Estilos de la lista de tareas
+--------------------------------
+*/
+
+.holder {
+  background: #f0efe9;
+  min-height: 100vh;
+}
+
+.rounded {
+  border-radius: 1rem !important;
+}
+
+.text-gray {
+  color: #aaa;
+}
+
+input:checked + label {
+  text-decoration: line-through;
+  color: #adb5bd;
+}
+
+label {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+.form-check-left {
+  display: flex;
+  align-items: center;
+  width: 80%
+}
+
+.form-check-label {
+  width: 100%;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: 24px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.iconAddTarea{
+  font-size: 24px;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+}
+/*
+--------------------------------
+  FIN Estilos de la lista de tareas
+--------------------------------
+*/
+
+/*
+--------------------------------
+  Estilos DIALOG
+--------------------------------
+*/
+/* Estilo para redondear las esquinas del diálogo */
+.customDialogAddTarea {
+  border: 2px solid red !important; /* Ejemplo de estilo con !important */
+  border-radius: 10px !important;
+  
+}
+.customDialogAddTarea .mat-mdc-dialog-surface {
+  border-radius: 10px; /* Cambia este valor según el grado de redondez deseado */
+  border: 2px solid red; /* Cambia el color del borde según tu preferencia */
+  
+}
+/*
+--------------------------------
+  FIN Estilos DIALOG
+--------------------------------
+*/

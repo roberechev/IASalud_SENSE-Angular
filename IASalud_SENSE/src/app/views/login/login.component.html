@@ -1,1 +1,16 @@
-<p>login works!</p>
+<div class="full-screen-bg">
+    <div class="form-bg">
+        <div class="container">
+            <div class="form-horizontal">
+                <span class="heading" *ngIf="!isAdminLogin">Log In</span>
+                <span class="heading" *ngIf="isAdminLogin">Admin</span>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="password_user" placeholder="Password">
+                    <p *ngIf="!isAdminLogin">Login como <a class="resaltar puntero" (click)="btnCambioUser()">admin</a></p>
+                    <p *ngIf="isAdminLogin">Login como <a class="resaltar puntero" (click)="btnCambioUser()">user</a></p>
+                    <button class="btn" (click)="obtenerDatosLogin()">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

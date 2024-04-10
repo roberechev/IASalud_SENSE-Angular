@@ -1,0 +1,47 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  .container {
+    padding: 1%;
+    max-width: 100%;
+    margin: 0 auto;
+    height: 100%;
+  }
+  
+  .btn-exit {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 3px solid purple;
+    border-radius: 100%;
+    cursor: pointer;
+  }
+  
+  .left {
+    float: left;
+  }
+  
+  .right {
+    float: right;
+  }
+  
+  .buttons {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .btn {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+// graficas
+
+

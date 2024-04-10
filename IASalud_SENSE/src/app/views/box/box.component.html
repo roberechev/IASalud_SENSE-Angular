@@ -1,0 +1,31 @@
+
+
+
+<div class="container">
+  <button class="btn-exit left" (click)="salirAlHome()"><i class="fa-solid fa-arrow-left"></i></button>
+  <button class="btn-exit right" (click)="salirAlHome()"><i class="fa-solid fa-x"></i></button>
+
+  <div>
+    {{chartOptions}}
+  </div>
+  
+  
+  <div class="buttons">
+    <button class="btn">Botón 1</button>
+    <button class="btn">Botón 2</button>
+    <button class="btn">Botón 3</button>
+  </div>
+  <h3>{{ boxSeleccionado.nombre }}</h3>
+  <h4>{{ boxSeleccionado.paciente.numero_historia }}</h4>
+  <table class="tasks-table">
+    <!-- Aquí va tu tabla de tareas -->
+  </table>
+</div>
+
+<!--
+<audio controls>
+    <source src="{{ tarea.audio_recordatorio }}" type="audio/mpeg">
+    Tu navegador no soporta la reproducción de audio.
+  </audio>
+  <button class="btn btn-danger" (click)="eliminarTareaSeleccionada(tarea.id!)">Tarea Delete</button>
+-->

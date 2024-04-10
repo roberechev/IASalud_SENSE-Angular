@@ -5,62 +5,28 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-          <div class="hori-selector">
-              <div class="left"></div>
-              <div class="right"></div>
-          </div>
-          <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0);" (click)="obtenerHospitales()"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
-          </li>
-          <li class="nav-item active">
-              <a class="nav-link" href="javascript:void(0);"><i class="far fa-address-book"></i>Address Book</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0);"><i class="far fa-chart-bar"></i>Charts</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Documents</a>
-          </li>
+        <div class="hori-selector">
+            <div class="left"></div>
+            <div class="right"></div>
+        </div>
+        <li class="nav-item active" routerLinkActive="active">
+            <a id="home" class="nav-link" aria-current="page" routerLink="/home"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+            <a id="almacen" class="nav-link" aria-current="page" routerLink="/almacen"><i class="far fa-copy"></i>Documents</a>
+        </li>
+        <li class="nav-item " routerLinkActive="active">
+            <a id="perfil" class="nav-link" aria-current="page" routerLink="/perfil" *ngIf="esUsuarioLogueado()"><i class="far fa-user"></i></a>
+        </li>
+        <li class="nav-item " routerLinkActive="active">
+            <a id="login" class="nav-link" aria-current="page" routerLink="/login" *ngIf="!esUsuarioLogueado()"><i class="far fa-user"></i>Login</a>
+        </li>
       </ul>
   </div>
 </nav>
 
 
-<button class="btn btn-primary" (click)="obtenerHospitales()" >Peticion GET</button>
 
-<button class="btn btn-primary" (click)="aniadirHospital()" >Peticion POST</button>
-
-<button class="btn btn-danger" (click)="editarHospital()">Peticion PUT</button>
-
-<button class="btn btn-warning" (click)="eliminarHospital()">Peticion DELETE</button>
-
-<div>
-  <h1>HOSPITALES</h1>
-    <div *ngFor="let hospital of hospitales" class="col-md-4">
-    <!-- <div> -->
-      <div class="card">
-        <div class="card-body">
-        <!--
-          <h3>Nombre</h3>
-          <h4>ID</h4>
-          <p>direccion completa del hospital</p>
-          <p>num Boxes</p>
-        -->
-          <h3>{{ hospital.nombre }}</h3>
-          <h4>{{hospital.id}}</h4>
-          <p>{{ hospital.direccion }}</p>
-          <p>{{ hospital.numBoxes }}</p>
-         
-        </div>
-      </div>
-    </div>
-</div>
 
 
 

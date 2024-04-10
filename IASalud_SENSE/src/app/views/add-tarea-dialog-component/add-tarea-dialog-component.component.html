@@ -1,0 +1,21 @@
+<div class="container">
+  <h2>Añadir Tarea al Box: {{box.nombre}}</h2>
+  <div>
+    <div class="mb-3">
+      <label for="nombreTarea" class="form-label">Nombre de la Tarea:</label>
+      <input type="text" class="form-control" id="nombreTarea" name="nombreTarea" required>
+    </div>
+    <div class="mb-3">
+      <label for="prioridad" class="form-label">Prioridad:</label>
+      <select class="form-select" id="prioridad" name="prioridad" required>
+        <option value="1">High</option>
+        <option value="2">Medium</option>
+        <option value="3" selected>Low</option>
+      </select>
+    </div>
+    <div class="mb-3 d-flex flex-column flex-sm-row justify-content-end"> <!-- Utilizamos flexbox y flex-column para alinear los botones verticalmente en dispositivos pequeños -->
+      <button type="button" class="btn btn-secondary mb-2 mb-sm-0 me-sm-2" (click)="cancelarCambios()">Cancelar Cambios</button> <!-- Utilizamos mb-2 y mb-sm-0 para agregar un margen inferior en dispositivos pequeños -->
+      <button type="submit" class="btn btn-primary" (click)="guardarCambios()">Guardar Cambios</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; 
+}
+p{
+    font-size: 14px;
+}
+.full-screen-bg {
+    background-image: url("/assets/fondoLogin.png"); /* Cambia 'ruta/a/tu/imagen.jpg' por la ruta de tu imagen */
+    background-size: cover;
+    //background: #57BFB6;
+    background-position: center;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+.form-bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-horizontal{
+    background: #fff;
+    padding-bottom: 1%;
+    border-radius: 15px;
+    text-align: center;
+}
+.heading{
+    color: #93d3f3;
+}
+.puntero{
+    cursor: pointer;
+}
+.form-horizontal .heading{
+    display: block;
+    font-size: 35px;
+    font-weight: 700;
+    padding: 35px 0;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 30px;
+}
+.form-horizontal .form-group{
+    padding: 0 40px;
+    margin: 0 0 25px 0;
+    position: relative;
+}
+.form-horizontal .form-control{
+    background: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    box-shadow: none;
+    padding: 0 20px 0 20px;
+    height: 40px;
+    transition: all 0.3s ease 0s;
+}
+.form-horizontal .btn{
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+    background: #00b4ef;
+    border-radius: 30px;
+    padding: 10px 25px;
+    border: none;
+    text-transform: capitalize;
+    transition: all 0.5s ease 0s;
+}
