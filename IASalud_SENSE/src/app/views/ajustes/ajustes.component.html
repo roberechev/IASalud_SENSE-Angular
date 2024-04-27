@@ -1,1 +1,138 @@
-<p>ajustes works!</p>
+<div class="full-screen-bg">
+    
+    <div class="container">
+        <div class="titulo">
+            <h2 >Ajustes de sensores</h2>
+        </div>
+        <div class="sensor-settings">
+            <div>
+                <h4>Añadir Sensor de Thingsboard</h4>
+                <div class="form-group align-items-center">
+                    <div class="form-block">
+                        <label for="sensorId">ID:</label>
+                        <input type="text" id="addSensorId" name="addSensorId" [(ngModel)]="addSensorId" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <label for="addNombreSensor">Nombre:</label>
+                        <input type="text" id="addNombreSensor" name="addNombreSensor" [(ngModel)]="addNombreSensor" class="form-control">
+                    </div>
+                    <button class="btn btn-primary" (click)="agregarSensor()">Añadir</button>
+                </div>
+            </div>
+            <div>
+                <h4>Modificar/Eliminar Sensor</h4>
+                <div class="select-container">
+                    <app-combobox-dispositivos-ajustes [actualizar]="refrescarDispositivosComponente"></app-combobox-dispositivos-ajustes>
+                </div>
+                <div class="form-group align-items-center">
+                    <div class="form-block">
+                        <label for="nuevoId">ID:</label>
+                        <input type="text" id="updateSensorId" name="updateSensorId" [(ngModel)]="updateSensorId" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <label for="updateNombreSensor">Nombre:</label>
+                        <input type="text" id="updateNombreSensor" name="updateNombreSensor" [(ngModel)]="updateNombreSensor" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <button class="btn btn-primary" (click)="modificarSensor()">Modificar</button>
+                        <button class="btn btn-danger" (click)="eliminarSensor()">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="titulo">
+            <h2>Ajustes de pacientes</h2>
+        </div>
+        <div class="sensor-settings">
+            <div>
+                <h4>Añadir Paciente</h4>
+                <div class="form-group align-items-center">
+                    <div class="form-block">
+                        <label for="addPacienteNHC">NHC:</label>
+                        <input type="text" id="addPacienteNHC" name="addPacienteNHC" [(ngModel)]="addPacienteNHC" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <label for="addNombrePaciente">Nombre:</label>
+                        <input type="text" id="addNombrePaciente" name="addNombrePaciente" [(ngModel)]="addNombrePaciente" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <label for="addEdadPaciente">Edad:</label>
+                        <input type="text" id="addEdadPaciente" name="addEdadPaciente" [(ngModel)]="addEdadPaciente" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <label for="addGeneroPaciente">Género:</label>
+                        <input type="text" id="addGeneroPaciente" name="addGeneroPaciente" [(ngModel)]="addGeneroPaciente" class="form-control">
+                    </div>
+                    <button class="btn btn-primary" (click)="agregarPaciente()">Añadir</button>
+                </div>
+            </div>
+            <div>
+                <h4>Modificar/Eliminar Paciente</h4>
+                <div class="select-container">
+                    <app-combobox-pacientes [ajustes]="true" [actualizar]="refrescarPacientesComponente"></app-combobox-pacientes>
+                </div>
+                <div class="form-group align-items-center">
+                    <div class="form-block">
+                        <label for="updatePacienteNHC">NHC:</label>
+                        <input type="text" id="updatePacienteNHC" name="updatePacienteNHC" [(ngModel)]="updatePacienteNHC" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <label for="updateNombrePaciente">Nombre:</label>
+                        <input type="text" id="updateNombrePaciente" name="updateNombrePaciente" [(ngModel)]="updateNombrePaciente" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <label for="updateEdadPaciente">Edad:</label>
+                        <input type="text" id="updateEdadPaciente" name="updateEdadPaciente" [(ngModel)]="updateEdadPaciente" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <label for="updateGeneroPaciente">Género:</label>
+                        <input type="text" id="updateGeneroPaciente" name="updateGeneroPaciente" [(ngModel)]="updateGeneroPaciente" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <button class="btn btn-primary" (click)="modificarPaciente()">Modificar</button>
+                        <button class="btn btn-danger" (click)="eliminarPaciente()">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="titulo">
+            <h2 >Ajustes de boxes</h2>
+        </div>
+        <div class="sensor-settings">
+            <div>
+                <h4>Añadir Box</h4>
+                <div class="form-group align-items-center">
+                    <div class="form-block">
+                        <label for="addNombreBox">Nombre:</label>
+                        <input type="text" id="addNombreBox" name="addNombreBox" [(ngModel)]="addNombreBox" class="form-control">
+                    </div>
+                    <button class="btn btn-primary" (click)="agregarBox()">Añadir</button>
+                </div>
+            </div>
+            <div>
+                <h4>Modificar/Eliminar Box</h4>
+                <div class="select-container">
+                    <app-combobox-boxes [actualizar]="refrescarBoxesComponente"></app-combobox-boxes>
+                </div>
+                <div class="form-group align-items-center">
+                    <div class="form-block">
+                        <label for="updateNombreBox">Nombre:</label>
+                        <input type="text" id="updateNombreBox" name="updateNombreBox" [(ngModel)]="updateNombreBox" class="form-control">
+                    </div>
+                    <div class="form-block">
+                        <button class="btn btn-primary" (click)="modificarBox()">Modificar</button>
+                        <button class="btn btn-danger" (click)="eliminarBox()">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="empty-div"></div>
+</div>

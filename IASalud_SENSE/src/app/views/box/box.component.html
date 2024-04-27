@@ -3,24 +3,141 @@
 
 <div class="container">
   <button class="btn-exit left" (click)="salirAlHome()"><i class="fa-solid fa-arrow-left"></i></button>
-  <button class="btn-exit right" (click)="salirAlHome()"><i class="fa-solid fa-x"></i></button>
+  <!--<button class="btn-exit right" (click)="salirAlHome()"><i class="fa-solid fa-x"></i></button>-->
+
+  <div class="tituloBox">
+    <!--Si el box no es null que pinte sus elementos-->
+    <h1>Box: {{ boxSeleccionado==null?"":boxSeleccionado.nombre }}  NHC: {{boxSeleccionado==null?"":(boxSeleccionado.paciente==null?"":boxSeleccionado.paciente.numero_historia) }}</h1>
+  </div>
+
+  <div class="checkbox-container">
+    <div class="centrado">
+      <button class="btn btn-primary" (click)="scrollToTareas()">Ver tareas</button>
+    </div>
+    <div class="centrado">
+      <button class="btn btn-primary" id="btnAjustesSeleccionadosID" (click)="ajustesSeleccionados = !ajustesSeleccionados"><i class="fa-solid fa-gear"></i></button>
+    </div>
+  </div>
+
+  <div *ngIf="ajustesSeleccionados">
+    <div class="checkbox-container">
+      <div>
+        <input type="checkbox" id="temperatura" [(ngModel)]="mostrarGraficaTemperatura" (change)="guardarGraficasSeleccionadas()">
+        <label for="temperatura">Temperatura</label>
+      </div>
+      <div>
+        <input type="checkbox" id="humedad" [(ngModel)]="mostrarGraficaHumedad" (change)="guardarGraficasSeleccionadas()">
+        <label for="humedad">Humedad</label>
+      </div>
+    </div>
+
+    <div class="select-container">
+      <app-combobox-pacientes [id_boxSeleccionado]=boxSeleccionado.id!></app-combobox-pacientes>
+    </div>
+
+    <div class="select-container">
+      <app-combobox-dispositivos [boxSeleccionado]=boxSeleccionado [btn_aniadir]=true></app-combobox-dispositivos>
+    </div>
+
+    <div class="select-container">
+      <app-combobox-dispositivos [boxSeleccionado]=boxSeleccionado [btn_aniadir]=false></app-combobox-dispositivos>
+    </div>
+    
+  </div>
+
+  <div class="containerCharts" *ngIf="true">
+    <!--<div class="rowCharts">
+      <div class="chart-container">
+        <ag-charts-angular [options]="ejemploGrafica"></ag-charts-angular>
+      </div>
+      <div class="chart-container">
+        <ag-charts-angular [options]="ejemploGrafica"></ag-charts-angular>
+      </div>
+    </div>-->
+    <div class="rowCharts">
+      <div class="chart-container" *ngIf="mostrarGraficaTemperatura">
+        <ag-charts-angular [options]="graficaTemperatura"></ag-charts-angular>
+      </div>
+      <div class="chart-container" *ngIf="mostrarGraficaHumedad">
+        <ag-charts-angular [options]="graficaHumedad"></ag-charts-angular>
+      </div>
+      <div class="chart-container" *ngIf="mostrarGraficaUrinometro">
+        <ag-charts-angular [options]="graficaUrinometro"></ag-charts-angular>
+      </div>
+    </div>
+  </div> 
+
 
   <div>
-    {{chartOptions}}
+    <h2 class="tituloBox tituloTareas" id="tituloTareas">Tareas del Box: {{ boxSeleccionado==null?"":boxSeleccionado.nombre }}  NHC: {{boxSeleccionado==null?"":(boxSeleccionado.paciente==null?"":boxSeleccionado.paciente.numero_historia) }}</h2>
+    
+    <div class="opcionesTablaTareas" *ngIf="true">
+      <button (click)="startRecording()" [disabled]="recording">Grabar audio</button>
+      <button (click)="stopRecording()" [disabled]="!recording">Detener grabacion</button>
+      <button class="btn btn-primary" (click)="abrirAddTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nueva Tarea</button>
+    </div>
+    
+    <div class="table-responsive">
+      <table class="table">
+        <tbody>
+          <!-- Iteración sobre cada tarea para mostrarlas en la tabla -->
+          <tr *ngFor="let tarea of tareasOrdenadas" class="align-middle cada_tarea">
+            <!-- Nombre de la tarea -->
+            <td class="task-column">{{ tarea.nombre }}</td>
+            
+            <!-- Prioridad de la tarea -->
+            <td class="priority-column">
+              <div class="d-inline-block rounded-pill p-1"
+                   [ngClass]="{
+                    'bg-rojo': tarea.prioridad == 1,
+                    'bg-naranja': tarea.prioridad == 2,
+                    'bg-verde': tarea.prioridad == 3
+                  }">
+                  {{ tarea.prioridad == 1 ? 'High' : (tarea.prioridad == 2 ? 'Medium' : 'Low') }}
+              </div>
+            </td>
+            
+            <!-- Audio de la tarea -->
+            <td *ngIf="comprobacionAudioParaTrancripcion(tarea.audio_recordatorio!)" class="audio-column">
+              <audio controls>
+                <source [src]="tarea.audio_recordatorio" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td *ngIf="!comprobacionAudioParaTrancripcion(tarea.audio_recordatorio!)" class="audio-column">
+              <p>Esta tarea no tiene audio asignado</p>
+            </td>
+            
+            <!-- Botón para mostrar la transcripción -->
+            <td *ngIf="comprobacionAudioParaTrancripcion(tarea.audio_recordatorio!)" class="action-column-trancripcion">
+              <button class="btn btn-primary" (click)="abrirDialogoTranscripcion(tarea.id!)">
+                <i class="fa-solid fa-file-lines"></i>
+              </button>
+            </td>
+            <td *ngIf="!comprobacionAudioParaTrancripcion(tarea.audio_recordatorio!)" id="transcripcionBlanco" class="action-column-trancripcion"></td>
+            
+            <!-- Botón para eliminar la tarea -->
+            <td class="action-column-eliminar">
+              <button class="btn btn-danger" (click)="eliminarTarea(tarea.id!)">
+                <i class="fa-solid fa-x"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  
-  
-  <div class="buttons">
-    <button class="btn">Botón 1</button>
-    <button class="btn">Botón 2</button>
-    <button class="btn">Botón 3</button>
-  </div>
-  <h3>{{ boxSeleccionado.nombre }}</h3>
-  <h4>{{ boxSeleccionado.paciente.numero_historia }}</h4>
-  <table class="tasks-table">
-    <!-- Aquí va tu tabla de tareas -->
-  </table>
+
+
+
+
+
+
 </div>
+
+
+
+
 
 <!--
 <audio controls>

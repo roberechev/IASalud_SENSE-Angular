@@ -23,8 +23,11 @@ export class TareaService {
       this.httpClient.post(environment.apiUrl + "boxes/" + idBox + "/add_tarea/", {"id_tarea": idTarea}).subscribe((data: any) => {
         console.log("Tarea añadida al box");
         //evento de actualización
-        this.actualizarTareasSubject.next(0);
+        this.actualizarTareas();
       });
     });
+  }
+  public actualizarTareas() {
+    this.actualizarTareasSubject.next(0);
   }
 }

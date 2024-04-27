@@ -1,0 +1,20 @@
+<div class="combobox" *ngIf="btn_aniadir">
+    <input type="text" [(ngModel)]="inputItem" (ngModelChange)="getFilteredList()" class="combobox-input" (keyup)="onKeyPress($event)" (blur)="toggleListDisplay(0)" (focus)="toggleListDisplay(1)" placeholder="Añadir Sensor" [ngClass]="{'error': showError}">
+    <span *ngIf="showError" class="error-text"><i> Nada seleccionado </i></span>
+    <!--<app-comb [list]="itemList"></app-combo-box>-->
+    <button class="btn-exit" (click)="recargarValoresVacios()"><i class="fa-solid fa-xmark"></i></button>
+    <button *ngIf="!showError" class="btn btn-primary botonGuardar" (click)="aniadirSensorAlBox()">Añadir Sensor</button>
+    <div class="combobox-options" *ngIf="!listHidden">
+        <list-item *ngFor="let item of filteredList;let i = index" (click)="selectItem(i)" [ngClass]="{'selected': i===selectedIndex}">{{item}}</list-item>
+    </div>
+</div>
+<div class="combobox" *ngIf="!btn_aniadir">
+    <input type="text" [(ngModel)]="inputItemEliminar" (ngModelChange)="getFilteredListEliminar()" class="combobox-input" (keyup)="onKeyPressEliminar($event)" (blur)="toggleListDisplayEliminar(0)" (focus)="toggleListDisplayEliminar(1)" placeholder="Eliminar Sensor" [ngClass]="{'error': showErrorEliminar}">
+    <span *ngIf="showErrorEliminar" class="error-text"><i> Nada seleccionado </i></span>
+    <!--<app-comb [list]="itemList"></app-combo-box>-->
+    <button class="btn-exit" (click)="recargarValoresVaciosEliminar()"><i class="fa-solid fa-xmark"></i></button>
+    <button *ngIf="!showErrorEliminar" class="btn btn-danger botonGuardar" (click)="eliminarSensorDelBox()">Eliminar Sensor</button>
+    <div class="combobox-options" *ngIf="!listHiddenEliminar">
+        <list-item *ngFor="let itemEliminar of filteredListEliminar;let j = index" (click)="selectItemEliminar(j)" [ngClass]="{'selected': j===selectedIndexEliminar}">{{itemEliminar}}</list-item>
+    </div>
+</div>

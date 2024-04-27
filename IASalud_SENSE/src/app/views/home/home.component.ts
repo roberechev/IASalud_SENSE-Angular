@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BoxService } from '../../services/box.service';
 import { Box } from '../../models/box';
 import { CommonModule } from '@angular/common';
@@ -19,15 +20,11 @@ import { TareaService } from '../../services/tarea.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, RouterOutlet, RouterLink, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-
-  mediaRecorder!: MediaRecorder;
-  chunks: Blob[] = [];
-  recording = false;
 
   //private actualizarSensorSubscription: Subscription;
   boxes: Box[] = [];
@@ -48,7 +45,11 @@ export class HomeComponent {
   }
 
   public cargaFechaUltimoRegistroSensor(sensor: Sensor): string {
-    return  this.formatDate(sensor.ultimo_registro);
+    let fecha = "";
+    if(sensor != undefined && sensor != null && sensor.ultimo_registro != undefined && sensor.ultimo_registro != null){
+      fecha = this.formatDate(sensor.ultimo_registro)
+    }
+    return fecha;
   }
 
   private formatDate(date: Date): string {
@@ -60,43 +61,66 @@ export class HomeComponent {
     return ultimaFecha.toLocaleDateString('es-ES', options).replace(',', ' -');
   }
 
-  constructor(private boxService: BoxService, private hospitalService: HospitalService, private sensorService: SensorService, 
-    private dialog: MatDialog, private route: Router, private usuarioService: UsuarioService, private tareaService: TareaService) { }
-
-  // se puede eliminar
-  public movilidadAlmacen() {
-    this.usuarioService.navegacionNavBar('almacen');
-    this.route.navigate(['almacen']);
-  }
-
-  
-  // public obtenerSensores(idBox: number) {
-  //  return this.boxes[idBox].sensores;
-  // }
+  constructor(private boxService: BoxService, private sensorService: SensorService, private dialog: MatDialog, private route: Router, 
+    private tareaService: TareaService) { }
 
   public obtenerBoxes() {
     this.boxService.getBoxes().subscribe((data: Box[]) => {
-      this.boxes = data;
+      this.boxes = data.filter(box => box != null);
     });
   }
 
   public obtenerUltimosValores(sensor: Sensor) {
-     // Crear un objeto para almacenar los últimos registros por tipo de unidad
-     const ultimosRegistros: { [unidades: string]: Registro } = {};
+    if (sensor != undefined && sensor != null && sensor.registros != undefined && sensor.registros != null) {
+        // Crear un objeto para almacenar los últimos registros por tipo de unidad
+        const ultimosRegistros: { [unidades: string]: Registro } = {};
 
-     // Iterar sobre los registros del sensor
-     sensor.registros.forEach(registro => {
-         // Obtener la unidad de medida del registro actual
-         const unidades = registro.unidades;
- 
-         // Verificar si ya hay un registro para esta unidad
-         if (!ultimosRegistros[unidades] || registro.id! > ultimosRegistros[unidades].id!) {
-             // Si no hay registro para esta unidad o si el ID del registro actual es mayor, actualizar el registro
-             ultimosRegistros[unidades] = registro;
-         }
-     });
-     // Convertir el objeto de últimos registros en un array y devolverlo
-     return Object.values(ultimosRegistros);
+        // Iterar sobre los registros del sensor
+        sensor.registros.forEach(registro => {
+            // Obtener la unidad de medida del registro actual
+            const unidades = registro.unidades;
+
+            // Verificar si ya hay un registro para esta unidad
+            if (!ultimosRegistros[unidades] || registro.id! > ultimosRegistros[unidades].id!) {
+                // Hacer una copia del registro actual para evitar modificar el original
+                const nuevoRegistro: Registro = { ...registro };
+
+                if (unidades == 'ºC') {
+                  nuevoRegistro.valor = nuevoRegistro.valor + " ºC";
+                }
+                if (unidades == '%') {
+                  nuevoRegistro.valor = nuevoRegistro.valor + " %";
+                }
+
+                if (unidades == 'color') {
+                  let separacion = nuevoRegistro.valor.split("|");
+                  nuevoRegistro.tipo = "rgb(" + separacion[0] + ", " + separacion[1] + ", " + separacion[2] + ")";
+                  nuevoRegistro.valor = "c: " + separacion[3] + ", temp: " + separacion[4] + ", lux: " + separacion[5];
+                }
+
+                if (unidades == 'glucosa') {
+                  nuevoRegistro.valor = nuevoRegistro.valor + " glucosa";
+                }
+
+                if (unidades == 'diuresis') {
+                  let separacion = nuevoRegistro.valor.split("|");
+                  nuevoRegistro.valor = separacion[1] + " gotas, " + separacion[2] + " ml/Kg/min";
+                }
+
+                // Asignar el nuevo registro al objeto ultimosRegistros
+                ultimosRegistros[unidades] = nuevoRegistro;
+            }
+        });
+
+        // Convertir el objeto de últimos registros en un array y devolverlo
+        return Object.values(ultimosRegistros);
+    } else {
+        return [];
+    }
+  }
+
+  public getColor(tipo: string) {
+    return tipo;
   }
 
   public obtenerTareasHigh(idBox: number) {
@@ -112,13 +136,18 @@ export class HomeComponent {
     }
   }
 
+  public obtenerSensores(box: Box) {
+    return box.sensores.filter(sensor => sensor != null);
+
+  }
+
   public abrirAddTarea(box: Box) {
     let dialogRef = this.dialog.open(AddTareaDialogComponentComponent, {
       height: '50%',
       maxHeight: '350px',
       width: '50%',
       maxWidth: '600px', 
-      data: { box: box },
+      data: { box: box},
       panelClass: 'customDialogAddTarea' // Aplica la clase personalizada al diálogo
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -127,75 +156,23 @@ export class HomeComponent {
     });
   }
 
-  public eliminarTarea(): void {
+  public eliminarTarea(idTarea: number) {
     if (confirm("¿Estás seguro de que deseas eliminar esta tarea?")) {
-      // Aquí llamarías a tu función para eliminar la tarea
-      // Por ejemplo: this.tareaService.eliminarTarea(id);
-      console.log("Tarea eliminada");
+      this.boxService.eliminarTareaSeleccionada(idTarea).subscribe((data: any) => {
+        console.log("Tarea eliminada");
+      });
+      this.obtenerBoxes();
+      this.tareaService.actualizarTareas();
     } else {
+      (<HTMLInputElement>document.querySelector('.idClassSeleccion')).checked = false;
       console.log("Eliminación de tarea cancelada");
+      this.tareaService.actualizarTareas();
     }
-  }
-
-  public eliminarTareaSeleccionada(idTarea: number) {
-    this.boxService.eliminarTareaSeleccionada(idTarea).subscribe((data: any) => {
-      console.info('Eliminada:', data);
-    });
   }
 
   public infoBox(box: Box) {
     // this.usuarioService.navegacionNavBar('home');
     this.route.navigate(['/box', box.id]);
   }
-
-  /* 
-  -------------------------------------------------------------------------------------
-  AUDIO 
-  -------------------------------------------------------------------------------------
-  */ 
-  public toggleRecording() {
-    if (!this.recording) {
-      this.startRecording();
-    } else {
-      this.stopRecording();
-    }
-  }
-
-  public startRecording() {
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        this.mediaRecorder = new MediaRecorder(stream);
-        this.mediaRecorder.ondataavailable = event => {
-          this.chunks.push(event.data);
-        };
-        this.mediaRecorder.onstop = () => {
-          const audioBlob = new Blob(this.chunks, { type: 'audio/mp3' });
-          this.uploadAudio(audioBlob);
-        };
-        this.mediaRecorder.start();
-        this.recording = true; // Actualizar estado de grabación
-      })
-      .catch(error => {
-        console.error('Error accessing microphone:', error);
-      });
-  }
-
-  public stopRecording() {
-    if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
-      this.mediaRecorder.stop();
-      this.recording = false; // Actualizar estado de grabación
-    }
-  }
-
-  public uploadAudio(audioBlob: Blob) {
-    this.boxService.guardarAudio(audioBlob).subscribe((data: any) => {
-      console.info('ROBER:', data);
-    });
-  }
-/* 
-  -------------------------------------------------------------------------------------
-  FIN AUDIO 
-  -------------------------------------------------------------------------------------
-  */ 
 
 }

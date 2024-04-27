@@ -7,6 +7,8 @@ import { PerfilComponent } from './views/perfil/perfil.component';
 import { logueadoGuard } from './guards/logueado.guard';
 import { adminGuard } from './guards/admin.guard';
 import { AjustesComponent } from './views/ajustes/ajustes.component';
+import { SpinnerComponent } from './views/spinner/spinner.component';
+import { ComboboxPacientesComponent } from './views/combobox-pacientes/combobox-pacientes.component';
 
 
 export const routes: Routes = [
@@ -16,6 +18,8 @@ export const routes: Routes = [
     {path: 'perfil', component:PerfilComponent, canActivate: [logueadoGuard]},
     {path: 'ajustes', component:AjustesComponent, canActivate: [adminGuard]},
     {path: 'almacen', component:AlmacenComponent, canActivate: [adminGuard]},
+    //{path: 'spinner', component:SpinnerComponent},
+    //{path: 'combo', component:ComboboxPacientesComponent},
     {path: '**', redirectTo: 'home'}
 
 ];

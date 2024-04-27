@@ -26,7 +26,9 @@ ngOnInit() {
   setTimeout(() => { 
     navbar();
   });
+  //if (this.esUsuarioLogueado()){
   this.cargarTokenYSocketThingsboard();
+  //}
 }
 
 public esUsuarioLogueado() {
@@ -49,7 +51,8 @@ public comprobarToken() {
       //console.info('---------Token Thingsboard:', data.token);
       this.hospitalService.guardarTokenThingsboard(data.token)
       this.sensorService.getSensores().subscribe((dataSensores: any) => {
-        WebSocketAPIExample(this.hospitalService.getTokenThingsboard()!, dataSensores, this.sensorService);
+        let filtroSensores = dataSensores.filter((sensor: Sensor) => sensor != null);
+        WebSocketAPIExample(this.hospitalService.getTokenThingsboard()!, filtroSensores, this.sensorService);
       });
       // this.hospitalService.getDispositivosThingsboard().subscribe((dataIds: any) => { 
       //   //get bd boxes

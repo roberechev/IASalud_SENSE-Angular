@@ -42,7 +42,7 @@ export class HospitalService {
 
   public guardarTokenThingsboard(tokenThingsboard: string) {
     localStorage.setItem('tokenThingsboard', tokenThingsboard)
-    console.info('Guardando Token:', tokenThingsboard);
+    // console.info('Guardando Token Thingsboard:', tokenThingsboard);
     setInterval(() => {
       this.getTokenThingsboardAPI().subscribe((data: any) => {
         this.guardarTokenThingsboard(data.token)

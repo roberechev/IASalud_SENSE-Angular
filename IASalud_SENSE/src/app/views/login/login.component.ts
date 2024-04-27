@@ -25,14 +25,16 @@ export class LoginComponent {
 
   public obtenerDatosLogin() {
 
-    this.username = this.isAdminLogin ? "admin" : "userIasalud";
+    //this.username = this.isAdminLogin ? "admin" : "userIasalud";
+    this.username = (<HTMLInputElement>document.getElementById('username_user')).value;
     this.password = (<HTMLInputElement>document.getElementById('password_user')).value;
-    if (this.password == "") {
+    if (this.password == "" || this.username == "") {
       alert("Rellene todos los campos");
     } else {
       this.comprobarUsuario(this.username, this.password);
     }
     //ponemos el campo de la contraseña en blanco
+    (<HTMLInputElement>document.getElementById('username_user')).value = "";
     (<HTMLInputElement>document.getElementById('password_user')).value = "";
   }
 
@@ -44,8 +46,8 @@ export class LoginComponent {
 
       if (data == "Invalid Password") {
         alert('Invalid Password');
-      } else if (data == 'incorrecto') {
-        alert('Error al iniciar sesión');
+      } else if (data == 'Invalid Username') {
+        alert('Usuario no encontrado');
       } else {
         console.log(data.token);
         console.log(data.user);

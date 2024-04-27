@@ -19,13 +19,14 @@ border-radius: 40px;
 .inner-card-body {
 display: flex;
 justify-content: space-between; /* Para separar los elementos a los extremos */
+align-items: center; /* Para centrar los elementos verticalmente */
 }
 
-.inner-card-body h3 {
+.inner-card-body h5 {
 margin: 0; /* Elimina el margen predeterminado del h3 */
 }
 
-.inner-card-body h4 {
+.inner-card-body h6 {
 margin: 0; /* Elimina el margen predeterminado del h4 */
 }
 
@@ -58,6 +59,10 @@ label {
   cursor: pointer;
 }
 
+.apuntando {
+  cursor: pointer;
+}
+
 a {
   text-decoration: none;
 }
@@ -87,6 +92,15 @@ a {
   align-items: left;
   justify-content: left;
 }
+
+@media (min-width: 765px) and (max-width: 1000px) {
+  .col-md-3 {
+    /* Estilos personalizados para ajustar la apariencia de las cards en ese rango de anchos */
+    /* Por ejemplo, podrías ajustar el tamaño del texto, el padding, el margen, etc. */
+    width: 33%;
+  }
+}
+
 /*
 --------------------------------
   FIN Estilos de la lista de tareas
@@ -98,17 +112,17 @@ a {
   Estilos DIALOG
 --------------------------------
 */
-/* Estilo para redondear las esquinas del diálogo */
+/* Estilo para redondear las esquinas del diálogo
 .customDialogAddTarea {
-  border: 2px solid red !important; /* Ejemplo de estilo con !important */
+  border: 2px solid red !important; 
   border-radius: 10px !important;
   
-}
-.customDialogAddTarea .mat-mdc-dialog-surface {
-  border-radius: 10px; /* Cambia este valor según el grado de redondez deseado */
-  border: 2px solid red; /* Cambia el color del borde según tu preferencia */
+} */
+//.customDialogAddTarea .mat-mdc-dialog-surface {
+  //border-radius: 10px; /* Cambia este valor según el grado de redondez deseado */
+  //border: 2px solid red; /* Cambia el color del borde según tu preferencia */
   
-}
+//}
 /*
 --------------------------------
   FIN Estilos DIALOG

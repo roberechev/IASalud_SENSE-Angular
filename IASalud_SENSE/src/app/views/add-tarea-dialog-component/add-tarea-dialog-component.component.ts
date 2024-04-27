@@ -13,13 +13,7 @@ import { TareaService } from '../../services/tarea.service';
 @Component({
   selector: 'app-add-tarea-dialog-component',
   standalone: true,
-  imports: [MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    MatButtonModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
+  imports: [MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatDialogTitle, MatDialogContent, MatDialogActions, 
     MatDialogClose,],
   templateUrl: './add-tarea-dialog-component.component.html',
   styleUrl: './add-tarea-dialog-component.component.scss'
@@ -44,9 +38,14 @@ export class AddTareaDialogComponentComponent {
     let prioridad = (<HTMLInputElement>document.getElementById('prioridad')).value;
     tarea.nombre = nombre;
     tarea.prioridad = parseInt(prioridad);
-    
-    this.tareaService.addTareaSinAudioToBox(this.box.id, tarea);
-    this.cancelarCambios();
+    console.log("---nombre:" + nombre);
+
+    if(tarea.nombre === "" || tarea.nombre == null || tarea.nombre == "" || nombre.trim().length === 0) {  
+      alert('El nombre de la tarea no puede estar vacío'); 
+    }else {
+      this.tareaService.addTareaSinAudioToBox(this.box.id, tarea);
+      this.cancelarCambios();
+    }
     //alert('Tarea guardada: ' + nombre + " " + prioridad + " " + tarea.audio_recordatorio);
   }
 

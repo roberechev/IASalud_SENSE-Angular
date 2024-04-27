@@ -1,37 +1,31 @@
-<div *ngIf="false">
-  <button class="btn btn-primary" (click)="obtenerBoxes()" >Peticion GET</button>
-  <button (click)="startRecording()" [disabled]="recording">Grabar audio</button>
-  <button (click)="stopRecording()" [disabled]="!recording">Detener grabacion</button>
-  <button class="btn btn-primary" (click)="movilidadAlmacen()">IR A ALMACEN</button>
-</div>
-
-
 <div class="container-fluid">
   <div class="row overflow-x-auto">
-    <div *ngFor="let box of boxes" class="col-md-4">
+    <div *ngFor="let box of boxes" class="col-sm-6 col-md-3">
       <div class="card custom-card" >
         <div class="card-body">
           
           <!-- Sección para el nombre y la historia del paciente -->
-          <div class="card inner-card" (click)="infoBox(box)">
+          <div class="card inner-card apuntando" (click)="infoBox(box)">
             <div class="card-body inner-card-body">
-              <h3><i class="fa-solid fa-circle" style="color: #74C0FC;"></i> <i class="fa-solid fa-bed" style="margin-left: 5px;"></i> #{{ box.nombre }}</h3>
-              <h4><b>NHC</b> {{ box.paciente.numero_historia }}</h4>
+              <h5><i class="fa-solid fa-circle" style="color: #74C0FC;"></i> <i class="fa-solid fa-bed" style="margin-left: 5px;"></i> #{{ box.nombre }}</h5>
+              <h6><b>NHC</b> {{ box.paciente==null?"":box.paciente.numero_historia }}</h6>
             </div>
           </div>
 
           <!-- Sección para la información del sensor -->
-          <div class="card inner-card" (click)="infoBox(box)">
+          <div class="card inner-card apuntando" (click)="infoBox(box)">
             <div class="card-body">
-              <div *ngFor="let sensor of box.sensores"><!--obtenerSensores(box.id!)-->
+              <div *ngFor="let sensor of obtenerSensores(box)"><!--box.sensores-->
                 <!--<h4>{{ sensor.nombre }}</h4>
                 <p>{{ sensor.tipo }}</p>
                 <p>{{ sensor.id_dispositivo_th }}</p>-->
                 <div *ngFor="let valor of obtenerUltimosValores(sensor)">
-                  <p>{{ valor.id }}</p>
-                  <h4><i class="fa-solid fa-temperature-three-quarters" *ngIf="valor.unidades=='ºC'"></i> 
+                  <!--<p>{{ valor.id }}</p>-->
+                  <h6 *ngIf="valor.unidades!='color'"><i class="fa-solid fa-temperature-three-quarters" *ngIf="valor.unidades=='ºC'"></i> 
                     <i class="fa-solid fa-droplet" *ngIf="valor.unidades=='%'"></i>
-                    {{ valor.valor }} {{ valor.unidades }}</h4>
+                    <i class="fa-solid fa-eye-dropper" *ngIf="valor.unidades=='diuresis'"></i>
+                    {{ valor.valor }}</h6>
+                    <h6 *ngIf="valor.unidades=='color'"><i class="fa-solid fa-droplet" [style.color]="getColor(valor.tipo)"></i> {{ valor.valor }} </h6>
                 </div>
                 <p><i class="fa-solid fa-signal"></i> ult. {{ cargaFechaUltimoRegistroSensor(sensor) }}</p>
                 <!--
@@ -49,12 +43,12 @@
           <div class="card inner-card">
             <div class="card-body">
               <div class="iconAddTarea">
-                <i class="fa-solid fa-plus aniadirTarea" (click)="abrirAddTarea(box)"></i>
+                <i class="fa-solid fa-plus aniadirTarea apuntando" (click)="abrirAddTarea(box)"></i>
               </div>
               <ng-container *ngFor="let tarea of obtenerTareasHigh(box.id!); let last = last">
                 <div class="form-check d-flex align-items-center justify-content-between" [class.border-bottom]="!last">
                   <div class="form-check-left">
-                    <input class="form-check-input" id="{{ tarea.id }}" type="checkbox">
+                    <input class="form-check-input idClassSeleccion" id="{{ tarea.id }}" type="checkbox" (click)="eliminarTarea(tarea.id!)">
                     <label class="form-check-label ms-2 flex-grow-1" for="{{ tarea.id }}">
                       <span class="fst-italic pl-1">{{ tarea.nombre }}</span>
                     </label>

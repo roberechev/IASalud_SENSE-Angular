@@ -1,0 +1,86 @@
+.full-screen-bg {
+    background-image: url("/assets/fondoLogin.png"); /* Cambia 'ruta/a/tu/imagen.jpg' por la ruta de tu imagen */
+    background-size: cover;
+    //background: #57BFB6;
+    background-position: center;
+    //height: 100%;
+    //width: 100%;
+   
+}
+
+.container{
+    padding-bottom: 20px;
+}
+
+.sensor-settings {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid purple; /* Borde de las secciones internas */
+    border-radius: 40px;
+    background-color: #e4fbff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra difuminada */
+}
+
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center; /* Alinea todos los elementos verticalmente en el centro del contenedor */
+    margin-bottom: 20px;
+}
+
+.form-group label,
+.form-group input,
+.form-group button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+input{
+    max-width: 350px;
+}
+
+.titulo {
+    padding-top: 20px;
+    align-items: center;
+    text-align: center;
+}
+
+.titulo h2 {
+    display: inline-block; /* Asegura que el elemento ocupe solo el ancho del texto */
+    background-color: rgb(228, 251, 255, 0.6); /* Color de fondo blanco con opacidad */
+    border-radius: 10px; /* Borde redondeado */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Sombra difuminada */
+    padding: 10px 20px; /* Ajusta el espaciado alrededor del texto */
+}
+
+.select-container{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+
+
+.form-block {
+    display: flex; /* Utiliza el modelo de caja flexible */
+    align-items: center; /* Alinea los elementos verticalmente en el centro */
+}
+
+.form-block label {
+    margin-right: 10px; /* Espacio a la derecha del label */
+}
+
+.form-block input {
+    flex: 1; /* Permite que el input ocupe el espacio restante */
+    max-width: 250px; /* Ancho máximo del input */
+}
+
+
+
+.empty-div {
+    height: 90px;
+}
