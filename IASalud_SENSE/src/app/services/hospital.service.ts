@@ -32,7 +32,8 @@ export class HospitalService {
 
 
   public getTokenThingsboardAPI() {
-    const url = "http://localhost:8080/api/auth/login";
+    // const url = "http://localhost:8080/api/auth/login";
+    const url = environment.apiUrlTH + "auth/login";
     return this.httpClient.post(url, {"username": "tenant@thingsboard.org","password": "tenant"});
   }
 

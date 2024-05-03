@@ -27,18 +27,25 @@
                     {{ valor.valor }}</h6>
                     <h6 *ngIf="valor.unidades=='color'"><i class="fa-solid fa-droplet" [style.color]="getColor(valor.tipo)"></i> {{ valor.valor }} </h6>
                 </div>
-                <p><i class="fa-solid fa-signal"></i> ult. {{ cargaFechaUltimoRegistroSensor(sensor) }}</p>
-                <!--
-                <div *ngFor="let registro of sensor.registros">
-                  <p>{{ registro.id }}</p>
-                  <p>{{ registro.valor }}</p>
-                  <p>{{ registro.unidades }}</p>
-                </div>
-                -->
+                <p *ngIf="comprobarDiuresis(box, sensor)"><i class="fa-solid fa-signal"></i> ult. {{ cargaFechaUltimoRegistroSensor(sensor) }}</p>                
               </div>
+
             </div>
           </div>
 
+         <div class="card inner-card apuntando_grafica" (click)="infoBox(box)">
+ 
+              <div>
+
+                 <div class="chart-container" *ngIf="graficaGlucosa[box.id!] != null">
+                  <ag-charts-angular [options]="graficaGlucosa[box.id!]"></ag-charts-angular>
+                </div>
+                
+              </div>
+
+          </div>
+
+          
           <!-- Sección para la información de las tareas -->
           <div class="card inner-card">
             <div class="card-body">

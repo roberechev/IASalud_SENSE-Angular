@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import { Registro } from '../models/registro';
@@ -29,5 +29,21 @@ export class TareaService {
   }
   public actualizarTareas() {
     this.actualizarTareasSubject.next(0);
+  }
+
+  public guardarTareaConAudioToBox(audioBlob: Blob, idBox: number, nombreTarea: string, prioridad: number) {
+    let formData = new FormData();
+    formData.append("audio", audioBlob, "audio.mp3");
+    formData.append("prioridad", prioridad.toString());
+    formData.append("nombreTarea", nombreTarea + "|");
+  
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+  
+    this.httpClient.post(environment.apiUrl + 'boxes/' + idBox + '/upload-audio/', formData, { headers: headers }).subscribe((data: any) => {
+      console.log("Audio subido");
+      this.actualizarTareas();
+    });
+
   }
 }

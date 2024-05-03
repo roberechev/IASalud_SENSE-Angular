@@ -30,6 +30,16 @@ margin: 0; /* Elimina el margen predeterminado del h3 */
 margin: 0; /* Elimina el margen predeterminado del h4 */
 }
 
+.fa-temperature-three-quarters {
+  color: rgb(170, 24, 24); /* Cambia el color del icono */
+}
+.fa-droplet{
+  color: rgb(0, 170, 255);
+}
+.fa-eye-dropper{
+  color: rgb(149, 72, 0);
+}
+
 
 /*
 --------------------------------
@@ -61,6 +71,10 @@ label {
 
 .apuntando {
   cursor: pointer;
+}
+.apuntando_grafica{
+  cursor: pointer;
+  max-height: 550px;
 }
 
 a {

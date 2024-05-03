@@ -29,6 +29,14 @@
         <input type="checkbox" id="humedad" [(ngModel)]="mostrarGraficaHumedad" (change)="guardarGraficasSeleccionadas()">
         <label for="humedad">Humedad</label>
       </div>
+      <div>
+        <input type="checkbox" id="urinometro" [(ngModel)]="mostrarGraficaUrinometro" (change)="guardarGraficasSeleccionadas()">
+        <label for="urinometro">Urinómetro</label>
+      </div>
+      <div>
+        <input type="checkbox" id="glucosa" [(ngModel)]="mostrarGraficaGlucosa" (change)="guardarGraficasSeleccionadas()">
+        <label for="glucosa">Glucosa</label>
+      </div>
     </div>
 
     <div class="select-container">
@@ -55,15 +63,28 @@
       </div>
     </div>-->
     <div class="rowCharts">
+      <!--Grafica Temperatura-->
       <div class="chart-container" *ngIf="mostrarGraficaTemperatura">
         <ag-charts-angular [options]="graficaTemperatura"></ag-charts-angular>
       </div>
+      <!--Grafica Humedad-->
       <div class="chart-container" *ngIf="mostrarGraficaHumedad">
         <ag-charts-angular [options]="graficaHumedad"></ag-charts-angular>
       </div>
+      <!--Graficas Urinometro y Color-->
       <div class="chart-container" *ngIf="mostrarGraficaUrinometro">
-        <ag-charts-angular [options]="graficaUrinometro"></ag-charts-angular>
+        <div class="grafica">
+          <ag-charts-angular id="graficaUrinometroId" [options]="graficaUrinometro"></ag-charts-angular>
+        </div>
+        <div class="colorUrinometro">
+          <div [innerHTML]="dataColorParaGraficaUrinometro" class="icon-urinometro"></div>
+        </div>
       </div>
+      <!--Grafica Glucosa-->
+      <div class="chart-container" *ngIf="mostrarGraficaGlucosa">
+        <ag-charts-angular [options]="graficaGlucosa"></ag-charts-angular>
+      </div>
+        
     </div>
   </div> 
 
@@ -72,8 +93,7 @@
     <h2 class="tituloBox tituloTareas" id="tituloTareas">Tareas del Box: {{ boxSeleccionado==null?"":boxSeleccionado.nombre }}  NHC: {{boxSeleccionado==null?"":(boxSeleccionado.paciente==null?"":boxSeleccionado.paciente.numero_historia) }}</h2>
     
     <div class="opcionesTablaTareas" *ngIf="true">
-      <button (click)="startRecording()" [disabled]="recording">Grabar audio</button>
-      <button (click)="stopRecording()" [disabled]="!recording">Detener grabacion</button>
+      <button class="btn btn-primary" (click)="abrirAddAudioTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nuevo Audio</button>
       <button class="btn btn-primary" (click)="abrirAddTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nueva Tarea</button>
     </div>
     
@@ -83,7 +103,7 @@
           <!-- Iteración sobre cada tarea para mostrarlas en la tabla -->
           <tr *ngFor="let tarea of tareasOrdenadas" class="align-middle cada_tarea">
             <!-- Nombre de la tarea -->
-            <td class="task-column">{{ tarea.nombre }}</td>
+            <td class="task-column">{{ cargarNombreTarea(tarea) }}</td>
             
             <!-- Prioridad de la tarea -->
             <td class="priority-column">

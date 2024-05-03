@@ -81,10 +81,28 @@ label {
 
 // Graficas
 
+.colorUrinometro {
+  margin-bottom: 10px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.colorUrinometro:hover  {
+  font-size: 35px;
+}
+
+.icon-urinometro {
+  //position: absolute;
+  z-index: 1000;
+}
+
 .containerCharts {
   margin-top: 3%;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .rowCharts {
@@ -97,14 +115,16 @@ label {
   flex-grow: 1;
   margin-right: 5px;
   margin-left: 5px;
-  margin-bottom: 10px;
-  border: 1px solid red;
+  margin-bottom: 30px;
+  border: 1px solid purple;
   max-width: calc(50% - 10px);
+  overflow-y: auto;
 }
 
 @media (max-width: 768px) {
   .chart-container {
-    max-width: calc(100% - 10px);
+    max-width: calc(100% - 20px);
+    overflow-y: auto;
   }
 }
 

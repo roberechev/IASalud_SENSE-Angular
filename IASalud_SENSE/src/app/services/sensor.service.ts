@@ -70,11 +70,11 @@ export class SensorService {
       }
       // Verificar si existe la propiedad humidity
       if (jsonObject.data.humidity) {
-          registro.valor = jsonObject.data.humidity[0][1];
-          registro.unidades = "%";
-          //console.log("Humedad: " + jsonObject.data.humidity[0][1]);
-          // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
-          // this.addRegistroToSensor(idSensor, registro);
+        registro.valor = jsonObject.data.humidity[0][1];
+        registro.unidades = "%";
+        //console.log("Humedad: " + jsonObject.data.humidity[0][1]);
+        // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
+        // this.addRegistroToSensor(idSensor, registro);
       }
       if (jsonObject.data.r || jsonObject.data.g || jsonObject.data.b || jsonObject.data.c || jsonObject.data.temp || jsonObject.data.lux) {
         let valorColorimetro = "";
@@ -83,7 +83,7 @@ export class SensorService {
           + "|" + jsonObject.data.c[0][1] + "|" + jsonObject.data.temp[0][1] + "|" + jsonObject.data.lux[0][1];
         registro.valor = valorColorimetro;
         registro.unidades = "color";
-        console.log("Colorimetro: " + valorColorimetro);
+        // console.log("Colorimetro: " + valorColorimetro);
         // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
         // this.addRegistroToSensor(idSensor, registro);
       }
@@ -92,7 +92,7 @@ export class SensorService {
         valorGlucosa = jsonObject.data.glucose[0][1] + "|" + jsonObject.data.timestamp;
         registro.valor = valorGlucosa;
         registro.unidades = "glucosa";
-        console.log("Glucosa: " + valorGlucosa);
+        // console.log("Glucosa: " + valorGlucosa);
         // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
         // this.addRegistroToSensor(idSensor, registro);
       }
@@ -101,7 +101,7 @@ export class SensorService {
         valorDiuresis = jsonObject.data.reset[0][1] + "|" + jsonObject.data.drops[0][1] + "|" + jsonObject.data.diuresis[0][1];
         registro.valor = valorDiuresis;
         registro.unidades = "diuresis";
-        console.log("Diuresis: " + valorDiuresis);
+        // console.log("Diuresis: " + valorDiuresis);
         // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
         // this.addRegistroToSensor(idSensor, registro);
       }

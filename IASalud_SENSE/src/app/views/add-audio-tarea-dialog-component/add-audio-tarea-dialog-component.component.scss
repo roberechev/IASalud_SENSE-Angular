@@ -1,0 +1,98 @@
+.container {
+    max-width: 600px; /* Tamaño máximo ajustable según tus necesidades */
+    margin: auto; /* Centra el contenedor horizontalmente */
+}
+
+h2 {
+    margin-top: 20px; /* Espacio superior para separar el título del borde superior */
+    margin-bottom: 20px; /* Espacio inferior para separar el título del resto del contenido */
+}
+
+/* Opcional: Estilo para los botones */
+.btn {
+    min-width: 120px; /* Ancho mínimo ajustable según tus necesidades */
+}
+
+.btnDerechoPausa{
+    margin-left: 10px;
+}
+
+
+/* Animacion grabacion */
+
+
+span {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin: 0 5px;
+    position: relative;
+  }
+  
+  span::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    border-radius: 50%;
+    z-index: -1;
+    animation: ripple 1.5s ease-out infinite;
+  }
+  
+  span:first-child {
+    background-color: black;
+  }
+  
+  span:first-child::before {
+    animation-delay: 0.2s;
+  }
+  
+  span:nth-child(2) {
+    background-color: black;
+    transform: scale(0.9);
+  }
+  
+  span:nth-child(2)::before {
+    animation-delay: 0.4s;
+  }
+  
+  span:nth-child(3) {
+    background-color: black;
+    transform: scale(0.8);
+  }
+  
+  span:nth-child(3)::before {
+    animation-delay: 0.6s;
+  }
+  
+  span:nth-child(4) {
+    background-color: black;
+    transform: scale(0.7);
+  }
+  
+  span:nth-child(4)::before {
+    animation-delay: 0.8s;
+  }
+  
+  span:last-child {
+    background-color: black;
+    transform: scale(0.6);
+  }
+  
+  span:last-child::before {
+    animation-delay: 1s;
+  }
+  
+  @keyframes ripple {
+    from {
+      opacity: 1;
+      transform: scale(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(3);
+    }
+  }
+  

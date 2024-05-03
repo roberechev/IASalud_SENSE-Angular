@@ -47,18 +47,6 @@ export class BoxService {
     return this.httpClient.post<any>(environment.apiUrl + "boxes/" + id_box + "/delete_box/", {});
   }
 
-  public guardarAudio(audioBlob: Blob, idBox: number) {
-    let formData = new FormData();
-    formData.append("audio", audioBlob, "audio.mp3");
-    formData.append("prioridad", "3");
-  
-    let headers = new HttpHeaders();
-    headers.append('Content-Type', 'multipart/form-data');
-  
-    return this.httpClient.post(environment.apiUrl + 'boxes/' + idBox + '/upload-audio/', formData, { headers: headers });
-
-  }
-
   public eliminarTareaSeleccionada(idTarea: number) {
     return this.httpClient.delete(environment.apiUrl + 'tareas/' + idTarea + '/');
   }
@@ -83,17 +71,19 @@ export class BoxService {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + this.hospitalService.getTokenThingsboard()
     });
-    let fechaStartMilisegundos: number = Date.now() - 60 * 60 * 1000; // ultima hora
+    //let fechaStartMilisegundos: number = Date.now() - 60 * 60 * 1000; // ultima hora
 
     //REMPLAZRA POR LA LINEA DE ARRIBA CUANDO EMPIECE A FUNCIONONAR LOS SENSORES
-    // let fechaActual = new Date();
-    // fechaActual.setMonth(fechaActual.getMonth() - 1);
-    // let fechaStartMilisegundos = fechaActual.getTime();
+    let fechaActual = new Date();
+    fechaActual.setMonth(fechaActual.getMonth() - 1);
+    let fechaStartMilisegundos = fechaActual.getTime();
 
     let fechaEndMilisegundos: number = Date.now() + 24 * 60 * 60 * 1000;
     let idDispositivoThingsboard: string = sensor.id_dispositivo_th;
     let keys: string = "keys=temperature,humidity,glucose,timestamp,r,g,b,c,temp,lux,reset,drops,diuresis";
-    const url = "http://localhost:8080/api/plugins/telemetry/DEVICE/" + idDispositivoThingsboard + 
+    // const url = "http://localhost:8080/api/plugins/telemetry/DEVICE/" + idDispositivoThingsboard + 
+    // "/values/timeseries?" + keys + "&startTs=" + fechaStartMilisegundos + "&endTs=" + fechaEndMilisegundos;
+    const url = environment.apiUrlTH + "plugins/telemetry/DEVICE/" + idDispositivoThingsboard + 
     "/values/timeseries?" + keys + "&startTs=" + fechaStartMilisegundos + "&endTs=" + fechaEndMilisegundos;
     return this.httpClient.get(url, { headers: headers });
   }

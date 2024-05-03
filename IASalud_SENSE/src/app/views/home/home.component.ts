@@ -15,12 +15,19 @@ import { AddTareaDialogComponentComponent } from '../add-tarea-dialog-component/
 import { MatDialog } from '@angular/material/dialog';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TareaService } from '../../services/tarea.service';
+import { AgChartsAngularModule } from 'ag-charts-angular';
+import { AgChartOptions } from 'ag-charts-community';
 
+
+interface IDataFechaNumero {
+  fecha: Date;
+  valor: number;
+}
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, FormsModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, FormsModule, AgChartsAngularModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -29,6 +36,7 @@ export class HomeComponent {
   //private actualizarSensorSubscription: Subscription;
   boxes: Box[] = [];
   horaModificacion: string = '';
+  graficaGlucosa: { [idBox: string]: AgChartOptions } = {};
 
   // dispositivos: Record<string, string> = {};
 
@@ -67,7 +75,91 @@ export class HomeComponent {
   public obtenerBoxes() {
     this.boxService.getBoxes().subscribe((data: Box[]) => {
       this.boxes = data.filter(box => box != null);
+      this.boxes.forEach(element => {
+        let filtroSensores = element.sensores.filter(sensor => sensor != null);
+        this.cargarGraficaGlucosa((element.id!).toString(), filtroSensores);
+      });
     });
+  }
+
+  public cargarGraficaGlucosa(idBox: string, sensores: Sensor []) {
+    let registrosGlucosa: Registro[] = [];
+    if (sensores != undefined && sensores != null) {
+
+      sensores.forEach(s => {
+        if (s != null && s != undefined && s.registros != undefined && s.registros != null) {
+          s.registros.forEach(r => {
+            if (r != null && r != undefined && r.unidades == 'glucosa') {
+              registrosGlucosa.push(r);
+            }
+          });
+        } 
+
+        if (s != null && s != undefined){
+          this.boxService.obtenerDispositivosThingsboard(s).subscribe((data: any) => {
+
+            if (data.glucose != undefined && data.glucose != null) {
+              this.graficaGlucosa[idBox] = {
+                height: 300,
+                data: this.getDataGlucosa(data),
+                title: {
+                  text: "Glucosa",
+                },
+                series: [
+                  {
+                    type: "line",
+                    xKey: "fecha",
+                    yKey: "valor",
+                    stroke: 'purple', // Cambiamos el color de la línea a morado
+                    marker: { // Configuración de los marcadores
+                      fill: 'purple', // Cambiamos el color de los marcadores a morado
+                      stroke: 'purple'
+                    }
+                  },
+                ],
+                axes: [
+                  {
+                    type: "time",
+                    position: "bottom",
+                  },
+                  {
+                    type: "number",
+                    position: "left",
+                    crossLines: [
+                      {
+                        type: "range",
+                        range: [50, 150],
+                        strokeWidth: 0,
+                        fill: "rgba(0, 128, 0, 1)"
+                      },
+                    ],
+                    label: {
+                      formatter: (params) => {
+                        return params.value + "";
+                      },
+                    },
+                  },
+                ],
+              };
+            }
+
+          });
+        }
+
+      });
+    }
+  }
+
+  public getDataGlucosa(sensor: any) {
+    let dataGlucosa: IDataFechaNumero[] = [];
+      
+    sensor.glucose.forEach((elemento: any) => {
+      dataGlucosa.push({ fecha: new Date(elemento.ts), valor: parseFloat(elemento.value) } as IDataFechaNumero);
+    });
+  
+    dataGlucosa.sort((a, b) => a.fecha.getTime() - b.fecha.getTime());
+    //console.log(dataGlucosa);
+    return dataGlucosa;
   }
 
   public obtenerUltimosValores(sensor: Sensor) {
@@ -99,7 +191,8 @@ export class HomeComponent {
                 }
 
                 if (unidades == 'glucosa') {
-                  nuevoRegistro.valor = nuevoRegistro.valor + " glucosa";
+                  //nuevoRegistro.valor = nuevoRegistro.valor + " glucosa mg/dl";
+                  nuevoRegistro.valor = "";
                 }
 
                 if (unidades == 'diuresis') {
@@ -112,15 +205,30 @@ export class HomeComponent {
             }
         });
 
-        // Convertir el objeto de últimos registros en un array y devolverlo
-        return Object.values(ultimosRegistros);
+        // Ordenamos los registros según el orden de las unidades
+        const ordenUnidades = ['ºC', '%', 'diuresis', 'color', 'glucosa'];
+        const registrosOrdenados = ordenUnidades.map(unidad => ({ unidad, registro: ultimosRegistros[unidad] })).filter(objeto => objeto.registro);
+
+        return registrosOrdenados.map(objeto => objeto.registro);
     } else {
-        return [];
+        return null;
     }
   }
 
   public getColor(tipo: string) {
     return tipo;
+  }
+
+  public comprobarDiuresis(box: Box, sensor: Sensor) {
+    if (sensor != undefined && sensor != null && sensor.registros != undefined && sensor.registros != null){
+      if (sensor.registros.filter(registro => registro.unidades == 'glucosa').length > 0 && box.id == 1) {
+        return false;
+      }else{
+        return true;
+      }
+    }else{
+      return true;
+    }
   }
 
   public obtenerTareasHigh(idBox: number) {

@@ -7,6 +7,7 @@ import { UsuarioService } from './services/usuario.service';
 import { HospitalService } from './services/hospital.service';
 import { SensorService } from './services/sensor.service';
 import { Sensor } from './models/sensor';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -147,7 +148,8 @@ jQuery(document).ready(function ($) {
   function WebSocketAPIExample(tokenThingsboard: string, dispositivos: Sensor[], sensorService: SensorService) {
     // var entityIds = ["6f9c11c0-deda-11ee-82da-4d2b8f4eb4f7", "6f9ef7f0-deda-11ee-82da-4d2b8f4eb4f7"];
     
-    var webSocket = new WebSocket("ws://localhost:8080/api/ws");
+    // var webSocket = new WebSocket("ws://localhost:8080/api/ws");
+    var webSocket = new WebSocket(environment.shoketUrlTH);
   
     webSocket.onopen = function () {
       var authCmd = {
