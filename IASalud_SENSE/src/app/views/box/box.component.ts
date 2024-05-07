@@ -441,7 +441,7 @@ public getDataGlucosa(sensor: any) {
 
   public cargaSensoresThingsboard() {
     this.boxSeleccionado.sensores.forEach(sensor => {
-      this.boxService.obtenerDispositivosThingsboard(sensor).subscribe((data: any) => {
+      this.boxService.obtenerDispositivosThingsboard(sensor, this.boxSeleccionado.id!).subscribe((data: any) => {
         this.datosThingsboard.set(sensor.id_dispositivo_th, data);
         //console.log("datos de thingsboard: " + data); //toda la data
         this.cargarTodasGraficas();

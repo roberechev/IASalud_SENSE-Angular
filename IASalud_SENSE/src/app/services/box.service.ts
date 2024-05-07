@@ -67,16 +67,20 @@ export class BoxService {
     this.actualizarCambiosComboBox.next(0);
   }
 
-  public obtenerDispositivosThingsboard(sensor: Sensor) {
+  public obtenerDispositivosThingsboard(sensor: Sensor, id_box: number) {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + this.hospitalService.getTokenThingsboard()
     });
-    //let fechaStartMilisegundos: number = Date.now() - 60 * 60 * 1000; // ultima hora
 
-    //REMPLAZRA POR LA LINEA DE ARRIBA CUANDO EMPIECE A FUNCIONONAR LOS SENSORES
-    let fechaActual = new Date();
-    fechaActual.setMonth(fechaActual.getMonth() - 1);
-    let fechaStartMilisegundos = fechaActual.getTime();
+    let fechaStartMilisegundos: number = 0;
+    if (id_box == 7) {
+      fechaStartMilisegundos = Date.now() - 60 * 60 * 1000; // ultima hora
+    } else {
+      //REMPLAZRA POR LA LINEA DE ARRIBA CUANDO EMPIECE A FUNCIONONAR LOS SENSORES
+      let fechaActual = new Date();
+      fechaActual.setMonth(fechaActual.getMonth() - 1);
+      fechaStartMilisegundos = fechaActual.getTime();
+    }
 
     let fechaEndMilisegundos: number = Date.now() + 24 * 60 * 60 * 1000;
     let idDispositivoThingsboard: string = sensor.id_dispositivo_th;

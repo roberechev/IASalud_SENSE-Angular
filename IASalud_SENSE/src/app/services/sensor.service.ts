@@ -5,6 +5,8 @@ import {environment} from "../../environments/environment";
 import { Registro } from '../models/registro';
 import { BoxService } from './box.service';
 import { Observable, Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { Box } from '../models/box';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,7 @@ export class SensorService {
   private seleccionSensorAjustes = new Subject<String>();
   seleccionadoSensorAjustes$ = this.seleccionSensorAjustes.asObservable();
 
-  constructor(private httpClient: HttpClient, private boxService: BoxService) { }
+  constructor(private httpClient: HttpClient, private boxService: BoxService, private toastSvc: ToastrService) { }
 
   public getSensores() {
     return this.httpClient.get<Sensor[]>(environment.apiUrl + "sensores/" );
@@ -53,28 +55,36 @@ export class SensorService {
   }
 
   // Cargar nuevo registro del shocket
-  public cargarNuevoDato(message: string) {
+  public cargarNuevoDato(message: string, boxes: Box[]) {
     var registro = new Registro("", "", "", new Date());
     var jsonObject  = JSON.parse(message);
 
     var idSensor = jsonObject.subscriptionId;
+
+    let boxSeleccionado = boxes.find(box => box.sensores.find(sensor => sensor && sensor.id == idSensor));
 
     if (jsonObject.data) {
       // Verificar si existe la propiedad temperature
       if (jsonObject.data.temperature) {
         registro.valor = jsonObject.data.temperature[0][1];
         registro.unidades = "ºC";
+        if (parseFloat(registro.valor) > 31){
+          this.toastSvc.warning('Temperatura alta: ' + registro.valor + " ºC", 'Alerta box: ' + boxSeleccionado!.nombre);
+        }
         //console.log("Temperatura: " + jsonObject.data.temperature[0][1]);
         // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
-        // this.addRegistroToSensor(idSensor, registro);
+        this.addRegistroToSensor(idSensor, registro);
       }
       // Verificar si existe la propiedad humidity
       if (jsonObject.data.humidity) {
         registro.valor = jsonObject.data.humidity[0][1];
         registro.unidades = "%";
+        if (parseFloat(registro.valor) > 84){
+          this.toastSvc.warning('Humedad alta: ' + registro.valor + " %", 'Alerta box: ' + boxSeleccionado!.nombre);
+        }
         //console.log("Humedad: " + jsonObject.data.humidity[0][1]);
         // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
-        // this.addRegistroToSensor(idSensor, registro);
+        this.addRegistroToSensor(idSensor, registro);
       }
       if (jsonObject.data.r || jsonObject.data.g || jsonObject.data.b || jsonObject.data.c || jsonObject.data.temp || jsonObject.data.lux) {
         let valorColorimetro = "";
@@ -85,30 +95,41 @@ export class SensorService {
         registro.unidades = "color";
         // console.log("Colorimetro: " + valorColorimetro);
         // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
-        // this.addRegistroToSensor(idSensor, registro);
+        this.addRegistroToSensor(idSensor, registro);
       }
       if (jsonObject.data.glucose) {
         let valorGlucosa = "";
         valorGlucosa = jsonObject.data.glucose[0][1] + "|" + jsonObject.data.timestamp;
         registro.valor = valorGlucosa;
         registro.unidades = "glucosa";
+        if (parseFloat(registro.valor) > 150){
+          this.toastSvc.warning('Glucosa alta: ' + jsonObject.data.glucose[0][1] + " mg/dl", 'Alerta box: ' + boxSeleccionado!.nombre);
+        } else if (parseFloat(registro.valor) < 50){
+          this.toastSvc.warning('Glucosa baja: ' + jsonObject.data.glucose[0][1] + " mg/dl", 'Alerta box: ' + boxSeleccionado!.nombre);
+        }
         // console.log("Glucosa: " + valorGlucosa);
         // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
-        // this.addRegistroToSensor(idSensor, registro);
+        this.addRegistroToSensor(idSensor, registro);
       }
       if (jsonObject.data.reset || jsonObject.data.drops || jsonObject.data.diuresis) {
         let valorDiuresis = "";
         valorDiuresis = jsonObject.data.reset[0][1] + "|" + jsonObject.data.drops[0][1] + "|" + jsonObject.data.diuresis[0][1];
         registro.valor = valorDiuresis;
         registro.unidades = "diuresis";
+        if (parseFloat(jsonObject.data.drops[0][1]) > 144){
+          this.toastSvc.warning('Número de gotas alto en Urinometro: ' + jsonObject.data.drops[0][1] + " gotas", 'Alerta box: ' + boxSeleccionado!.nombre);
+        }
+        if (parseFloat(jsonObject.data.diuresis[0][1]) > 2.5){
+          this.toastSvc.warning('Diuresis alta en Urinometro: ' + jsonObject.data.diuresis[0][1] + " ml", 'Alerta box: ' + boxSeleccionado!.nombre);
+        }
         // console.log("Diuresis: " + valorDiuresis);
         // eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo
-        // this.addRegistroToSensor(idSensor, registro);
+        this.addRegistroToSensor(idSensor, registro);
       }
     }
     // console.log("---Datos:" + registro.valor + " " + registro.unidades);
     // Eliminar cuando este funcionando eeeeeeeeeeeeeeeeeveeeeeeeeeeeeeennntoooooooooo ACTUALIZACION AUTOMATICA SI NO INSERTO EN BBDD
-    this.actualizarSensorSubject.next(new Date());
+    //this.actualizarSensorSubject.next(new Date());
 
     // Object.entries(this.dispositivosThingsboardCargados).forEach(([key, value], index) => {
     //   if(posicionDispositivo==index){

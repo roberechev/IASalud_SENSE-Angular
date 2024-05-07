@@ -56,5 +56,12 @@ export class HospitalService {
     return this.httpClient.get<any>(environment.apiUrl + "hospitales/obtenerDispositivos");
   }
 
+
+  public guardarVerificacionThingsboard() {
+    localStorage.setItem('ya_cargado_th', "ya_cargado")
+  }
  
+  public getVerificacionThingsboard() {
+    return localStorage.getItem('ya_cargado_th');
+  }
 }

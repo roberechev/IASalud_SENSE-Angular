@@ -19,7 +19,7 @@
                 <!--<h4>{{ sensor.nombre }}</h4>
                 <p>{{ sensor.tipo }}</p>
                 <p>{{ sensor.id_dispositivo_th }}</p>-->
-                <div *ngFor="let valor of obtenerUltimosValores(sensor)">
+                <div *ngFor="let valor of obtenerUltimosValores(box, sensor)">
                   <!--<p>{{ valor.id }}</p>-->
                   <h6 *ngIf="valor.unidades!='color'"><i class="fa-solid fa-temperature-three-quarters" *ngIf="valor.unidades=='ºC'"></i> 
                     <i class="fa-solid fa-droplet" *ngIf="valor.unidades=='%'"></i>

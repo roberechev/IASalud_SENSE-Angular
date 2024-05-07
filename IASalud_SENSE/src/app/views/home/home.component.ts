@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BoxService } from '../../services/box.service';
 import { Box } from '../../models/box';
@@ -17,6 +17,9 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { TareaService } from '../../services/tarea.service';
 import { AgChartsAngularModule } from 'ag-charts-angular';
 import { AgChartOptions } from 'ag-charts-community';
+import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../environments/environment';
+
 
 
 interface IDataFechaNumero {
@@ -70,11 +73,16 @@ export class HomeComponent {
   }
 
   constructor(private boxService: BoxService, private sensorService: SensorService, private dialog: MatDialog, private route: Router, 
-    private tareaService: TareaService) { }
+    private tareaService: TareaService, private toastSvc: ToastrService, private hospitalService: HospitalService) { }
 
   public obtenerBoxes() {
     this.boxService.getBoxes().subscribe((data: Box[]) => {
       this.boxes = data.filter(box => box != null);
+      if (this.hospitalService.getVerificacionThingsboard() != "ya_cargado"){
+        console.log("Cargando token y socket thingsboard solo 1 vez");
+        this.hospitalService.guardarVerificacionThingsboard();
+        this.cargarTokenYSocketThingsboard();
+      }
       this.boxes.forEach(element => {
         let filtroSensores = element.sensores.filter(sensor => sensor != null);
         this.cargarGraficaGlucosa((element.id!).toString(), filtroSensores);
@@ -96,7 +104,7 @@ export class HomeComponent {
         } 
 
         if (s != null && s != undefined){
-          this.boxService.obtenerDispositivosThingsboard(s).subscribe((data: any) => {
+          this.boxService.obtenerDispositivosThingsboard(s, parseInt(idBox)).subscribe((data: any) => {
 
             if (data.glucose != undefined && data.glucose != null) {
               this.graficaGlucosa[idBox] = {
@@ -162,7 +170,7 @@ export class HomeComponent {
     return dataGlucosa;
   }
 
-  public obtenerUltimosValores(sensor: Sensor) {
+  public obtenerUltimosValores(box: Box, sensor: Sensor) {
     if (sensor != undefined && sensor != null && sensor.registros != undefined && sensor.registros != null) {
         // Crear un objeto para almacenar los últimos registros por tipo de unidad
         const ultimosRegistros: { [unidades: string]: Registro } = {};
@@ -204,10 +212,27 @@ export class HomeComponent {
                 ultimosRegistros[unidades] = nuevoRegistro;
             }
         });
-
+       
         // Ordenamos los registros según el orden de las unidades
         const ordenUnidades = ['ºC', '%', 'diuresis', 'color', 'glucosa'];
         const registrosOrdenados = ordenUnidades.map(unidad => ({ unidad, registro: ultimosRegistros[unidad] })).filter(objeto => objeto.registro);
+
+          // Object.entries(registrosOrdenados).forEach(([unidad, registro]) => {
+          //   switch (registro.registro.unidades) {
+          //     case 'ºC':
+          //       if (parseFloat(registro.registro.valor) > 30) {
+          //         this.toastSvc.warning('Temperatura alta: ' + registro.registro.valor, 'Alerta box: ' + box.nombre);
+          //       }
+          //       break; // Agrega break al final de cada caso
+          //     case '%':
+          //       if (parseFloat(registro.registro.valor) > 80) {
+          //         this.toastSvc.warning('Humedad alta: ' + registro.registro.valor, 'Alerta box: ' + box.nombre);
+          //       }
+          //       break; // Agrega break al final de cada caso
+          //   }
+          // });
+        
+       
 
         return registrosOrdenados.map(objeto => objeto.registro);
     } else {
@@ -217,6 +242,10 @@ export class HomeComponent {
 
   public getColor(tipo: string) {
     return tipo;
+  }
+
+  public comprobarAlertas() {
+    
   }
 
   public comprobarDiuresis(box: Box, sensor: Sensor) {
@@ -283,4 +312,90 @@ export class HomeComponent {
     this.route.navigate(['/box', box.id]);
   }
 
+
+
+  /* 
+  -------------------------------------------------------------------------------------
+  TOKEN Y WEB SOCKET THINGSBOARD 
+  -------------------------------------------------------------------------------------
+  */
+  public cargarTokenYSocketThingsboard() {
+    this.hospitalService.getTokenThingsboardAPI().subscribe((data: any) => {
+      //console.info('---------Token Thingsboard:', data.token);
+      this.hospitalService.guardarTokenThingsboard(data.token);
+
+      let todosSensores: Sensor[] = [];
+      this.boxes.forEach(box => {
+        todosSensores = todosSensores.concat(box.sensores);
+      });
+        
+      todosSensores = todosSensores.filter((sensor: Sensor) => sensor != null);
+      WebSocketAPIExample(this.hospitalService.getTokenThingsboard()!, todosSensores, this.sensorService, this.boxes);
+      // this.hospitalService.getDispositivosThingsboard().subscribe((dataIds: any) => { 
+      //   //get bd boxes
+      //   this.hospitalService.dispositivosThingsboardCargados = dataIds.dispositivosIds;
+      //   this.dispositivos = this.hospitalService.dispositivosThingsboardCargados;
+      //   WebSocketAPIExample(this.hospitalService.getTokenThingsboard()!, this.dispositivos, this.hospitalService);
+      // });
+      });
+  }
+  /* 
+  -------------------------------------------------------------------------------------
+  FIN TOKEN Y WEB SOCKET THINGSBOARD 
+  -------------------------------------------------------------------------------------
+  */
+
 }
+
+
+/* 
+  -------------------------------------------------------------------------------------
+  WEB SOCKET THINGSBOARD 
+  -------------------------------------------------------------------------------------
+  */
+  function WebSocketAPIExample(tokenThingsboard: string, dispositivos: Sensor[], sensorService: SensorService, boxes: Box[]) {
+    // var entityIds = ["6f9c11c0-deda-11ee-82da-4d2b8f4eb4f7", "6f9ef7f0-deda-11ee-82da-4d2b8f4eb4f7"];
+    
+    // var webSocket = new WebSocket("ws://localhost:8080/api/ws");
+    var webSocket = new WebSocket(environment.shoketUrlTH);
+  
+    webSocket.onopen = function () {
+      var authCmd = {
+        cmdId: 0,
+        token: tokenThingsboard
+      };
+
+      var cmds = dispositivos.map((sensor) => ({
+        entityType: "DEVICE",
+        entityId: sensor.id_dispositivo_th,
+        scope: "LATEST_TELEMETRY",
+        cmdId: sensor.id, 
+        type: "TIMESERIES"
+      }));
+  
+      var object = {
+        authCmd: authCmd,
+        cmds: cmds
+      };
+  
+      var data = JSON.stringify(object);
+      webSocket.send(data);
+      //console.log("Message is sent: " + data);
+    };
+  
+    webSocket.onmessage = function (event) {
+      var received_msg = event.data;
+      //console.log(event)
+      console.log("Message is received: " + received_msg);
+      sensorService.cargarNuevoDato(received_msg, boxes);
+    };
+  
+    webSocket.onclose = function (event) {
+      console.log("Connection is closed!");
+    };
+  }
+/* 
+  -------------------------------------------------------------------------------------
+  FIN WEB SOCKET THINGSBOARD 
+  -------------------------------------------------------------------------------------
+  */
