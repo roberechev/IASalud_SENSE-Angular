@@ -60,6 +60,9 @@ export class BoxComponent {
   boxSeleccionado: Box = new Box('', [], new Paciente('','','','', new Date() , false), [], new Date(), false);
   tareasOrdenadas: Tarea[] = [];
   datosThingsboard: Map<string, any> = new Map<string, any>();
+  modoEdicion: number = -1;
+  nombreModificacion: string = "";
+  prioridadModificacion: number = 3;
 
   // Fin AUDIO
   cargando: boolean = false;
@@ -441,7 +444,7 @@ public getDataGlucosa(sensor: any) {
 
   public cargaSensoresThingsboard() {
     this.boxSeleccionado.sensores.forEach(sensor => {
-      this.boxService.obtenerDispositivosThingsboard(sensor).subscribe((data: any) => {
+      this.boxService.obtenerDispositivosThingsboard(sensor, this.boxSeleccionado.id!).subscribe((data: any) => {
         this.datosThingsboard.set(sensor.id_dispositivo_th, data);
         //console.log("datos de thingsboard: " + data); //toda la data
         this.cargarTodasGraficas();
@@ -474,7 +477,7 @@ public getDataGlucosa(sensor: any) {
 
   public cargarNombreTarea(tarea: Tarea) {
     if (tarea.audio_recordatorio != null && tarea.audio_recordatorio != undefined) {
-      return (tarea.nombre.split("|")[0]).replace("-", " ");
+      return (tarea.nombre.split("|")[0]).replaceAll("-", " ");
     }
     return tarea.nombre;
 
@@ -508,6 +511,27 @@ public getDataGlucosa(sensor: any) {
       // Aquí puedes manejar la lógica después de que se cierre la ventana emergente
       console.log('The dialog was closed');
     });
+  }
+
+  public modoEdicionTarea(tarea: Tarea) {
+    this.modoEdicion = tarea.id!;
+    this.nombreModificacion = tarea.nombre;
+  }
+  public cancelarModoEdicionTarea() {
+    this.modoEdicion = -1;
+  }
+
+  public guardarCambiosTarea(tarea: Tarea) {
+    if (confirm("¿Estás seguro de que deseas guardar los cambios en esta tarea?")){
+      tarea.nombre = this.nombreModificacion;
+      tarea.prioridad = this.prioridadModificacion;
+      this.tareaService.modificarTarea(tarea).subscribe((data: any) => {
+        console.log("Tarea actualizada");
+      });
+      this.modoEdicion = -1;
+      this.prioridadModificacion = 3;
+      this.refrescarBoxParaTareas();
+    }
   }
 
   public eliminarTarea(idTarea: number) {

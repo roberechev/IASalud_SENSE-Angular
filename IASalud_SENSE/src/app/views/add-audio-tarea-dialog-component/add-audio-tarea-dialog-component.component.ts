@@ -29,6 +29,8 @@ export class AddAudioTareaDialogComponentComponent {
   audioBlob: Blob = null as any as Blob;
   blobCargado: boolean = false;
 
+  grabarAudio: boolean = false;
+
   constructor(public dialogRef: MatDialogRef<AddAudioTareaDialogComponentComponent>, @Inject(MAT_DIALOG_DATA) public data: {box: Box}, 
   private boxService: BoxService, private tareaService: TareaService) { }
   
@@ -41,14 +43,21 @@ export class AddAudioTareaDialogComponentComponent {
   }
 
   public guardarCambios() {
+    let tarea : Tarea = new Tarea("", 3, null, new Date(), new Date(), false);
     let nombre = (<HTMLInputElement>document.getElementById('nombreTarea')).value;
     let prioridad = (<HTMLInputElement>document.getElementById('prioridad')).value;
+    tarea.nombre = nombre;
+    tarea.prioridad = parseInt(prioridad);
 
-    if(nombre == "" || nombre == null || this.audioBlob == null || this.audioBlob == undefined) {  
-      alert('El nombre o el audio no han sido rellenados'); 
-    }else {
+    if(nombre != "" && nombre != null && !this.grabarAudio) {  
+      this.tareaService.addTareaSinAudioToBox(this.box.id, tarea);
+      this.cancelarCambios();
+    } else if(nombre != "" && nombre != null && this.audioBlob != null && this.audioBlob != undefined && this.grabarAudio){
       this.tareaService.guardarTareaConAudioToBox(this.audioBlob, this.box.id, nombre, parseInt(prioridad));
       this.cancelarCambios();
+    } else {
+      alert('El nombre o el audio no han sido rellenados'); 
+      
     }
     //alert('Tarea guardada: ' + nombre + " " + prioridad + " " + tarea.audio_recordatorio);
   }

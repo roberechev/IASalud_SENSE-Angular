@@ -38,7 +38,7 @@ export class AddTareaDialogComponentComponent {
     let prioridad = (<HTMLInputElement>document.getElementById('prioridad')).value;
     tarea.nombre = nombre;
     tarea.prioridad = parseInt(prioridad);
-    console.log("---nombre:" + nombre);
+    //console.log("---nombre:" + nombre);
 
     if(tarea.nombre === "" || tarea.nombre == null || tarea.nombre == "" || nombre.trim().length === 0) {  
       alert('El nombre de la tarea no puede estar vacío'); 

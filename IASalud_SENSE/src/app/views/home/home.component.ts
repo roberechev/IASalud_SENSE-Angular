@@ -75,9 +75,9 @@ export class HomeComponent {
   public obtenerBoxes() {
     this.boxService.getBoxes().subscribe((data: Box[]) => {
       this.boxes = data.filter(box => box != null);
-      this.boxes.forEach(element => {
-        let filtroSensores = element.sensores.filter(sensor => sensor != null);
-        this.cargarGraficaGlucosa((element.id!).toString(), filtroSensores);
+      this.boxes.forEach(box => {
+        let filtroSensores = box.sensores.filter(box => box != null);
+        this.cargarGraficaGlucosa((box.id!).toString(), filtroSensores);
       });
     });
   }
@@ -86,17 +86,17 @@ export class HomeComponent {
     let registrosGlucosa: Registro[] = [];
     if (sensores != undefined && sensores != null) {
 
-      sensores.forEach(s => {
-        if (s != null && s != undefined && s.registros != undefined && s.registros != null) {
-          s.registros.forEach(r => {
+      sensores.forEach(sensor => {
+        if (sensor != null && sensor != undefined && sensor.registros != undefined && sensor.registros != null) {
+          sensor.registros.forEach(r => {
             if (r != null && r != undefined && r.unidades == 'glucosa') {
               registrosGlucosa.push(r);
             }
           });
         } 
 
-        if (s != null && s != undefined){
-          this.boxService.obtenerDispositivosThingsboard(s).subscribe((data: any) => {
+        if (sensor != null && sensor != undefined){
+          this.boxService.obtenerDispositivosThingsboard(sensor, parseInt(idBox)).subscribe((data: any) => {
 
             if (data.glucose != undefined && data.glucose != null) {
               this.graficaGlucosa[idBox] = {
@@ -161,8 +161,89 @@ export class HomeComponent {
     //console.log(dataGlucosa);
     return dataGlucosa;
   }
-
+  
   public obtenerUltimosValores(sensor: Sensor) {
+    if (sensor != undefined && sensor != null && sensor.id != 20 && sensor.id != 21 && sensor.id != 22 && sensor.id != 23) {
+      let registros: Registro[] = [];
+      //console.log("sensor: " + sensor.id);
+      let registro = new Registro("", "", "", new Date());
+      let temp = JSON.parse(localStorage.getItem("grados|" + sensor.id)!);
+      //console.log("temp: " + temp['grados']);
+      registro.unidades = "ºC";
+      registro.valor = temp['grados'];
+      registros.push(registro);
+
+      registro = new Registro("", "", "", new Date());
+      let hum = JSON.parse(localStorage.getItem("%|" + sensor.id)!);
+      //console.log("hum: " + hum['%']);
+      registro.unidades = "%";
+      registro.valor = hum['%'];
+      registros.push(registro);
+
+      registro = new Registro("", "", "", new Date());
+      let color = JSON.parse(localStorage.getItem("color|" + sensor.id)!);
+      //console.log("color: " + color['color']);
+      registro.unidades = "color";
+      let separacionColor = color['color'].split("|");
+      registro.tipo = "rgb(" + separacionColor[0] + ", " + separacionColor[1] + ", " + separacionColor[2] + ")";
+      registro.valor = "c: " + separacionColor[3] + ", temp: " + separacionColor[4] + ", lux: " + separacionColor[5];
+      registros.push(registro);
+
+      registro = new Registro("", "", "", new Date());
+      let diuresis = JSON.parse(localStorage.getItem("diuresis|" + sensor.id)!);
+      //console.log("diuresis: " + diuresis['diuresis']);
+      registro.unidades = "diuresis";
+      let separacionDiuresis = diuresis['diuresis'].split("|");
+      registro.valor = separacionDiuresis[1] + " gotas, " + separacionDiuresis[2] + " ml/Kg/min";
+      registros.push(registro);
+
+      return registros;
+    } else if(sensor != undefined && sensor != null && sensor.id == 20){
+      let registros: Registro[] = [];
+      //console.log("sensor: " + sensor.id);
+      let registro = new Registro("", "", "", new Date());
+      let temp = JSON.parse(localStorage.getItem("grados|" + sensor.id)!);
+      //console.log("temp: " + temp['grados']);
+      registro.unidades = "ºC";
+      registro.valor = temp['grados'];
+      registros.push(registro);
+
+      registro = new Registro("", "", "", new Date());
+      let hum = JSON.parse(localStorage.getItem("%|" + sensor.id)!);
+      //console.log("hum: " + hum['%']);
+      registro.unidades = "%";
+      registro.valor = hum['%'];
+      registros.push(registro);
+      return registros;
+      
+    } else if(sensor != undefined && sensor != null && sensor.id == 21){
+      let registros: Registro[] = [];
+      let registro = new Registro("", "", "", new Date());
+      let color = JSON.parse(localStorage.getItem("color|" + sensor.id)!);
+      //console.log("color: " + color['color']);
+      registro.unidades = "color";
+      let separacionColor = color['color'].split("|");
+      registro.tipo = "rgb(" + separacionColor[0] + ", " + separacionColor[1] + ", " + separacionColor[2] + ")";
+      registro.valor = "c: " + separacionColor[3] + ", temp: " + separacionColor[4] + ", lux: " + separacionColor[5];
+      registros.push(registro);
+      return registros;
+
+    } else if(sensor != undefined && sensor != null && sensor.id == 23){
+      let registros: Registro[] = [];
+      let registro = new Registro("", "", "", new Date());
+      let diuresis = JSON.parse(localStorage.getItem("diuresis|" + sensor.id)!);
+      //console.log("diuresis: " + diuresis['diuresis']);
+      registro.unidades = "diuresis";
+      let separacionDiuresis = diuresis['diuresis'].split("|");
+      registro.valor = separacionDiuresis[1] + " gotas, " + separacionDiuresis[2] + " ml/Kg/min";
+      registros.push(registro);
+      return registros;
+    } else {
+      return null;
+    }
+   
+  }
+  /*public obtenerUltimosValores(sensor: Sensor) {
     if (sensor != undefined && sensor != null && sensor.registros != undefined && sensor.registros != null) {
         // Crear un objeto para almacenar los últimos registros por tipo de unidad
         const ultimosRegistros: { [unidades: string]: Registro } = {};
@@ -213,19 +294,15 @@ export class HomeComponent {
     } else {
         return null;
     }
-  }
+  }*/
 
   public getColor(tipo: string) {
     return tipo;
   }
 
   public comprobarDiuresis(box: Box, sensor: Sensor) {
-    if (sensor != undefined && sensor != null && sensor.registros != undefined && sensor.registros != null){
-      if (sensor.registros.filter(registro => registro.unidades == 'glucosa').length > 0 && box.id == 1) {
-        return false;
-      }else{
-        return true;
-      }
+    if (sensor != undefined && sensor != null && sensor.id == 22){
+      return false;
     }else{
       return true;
     }

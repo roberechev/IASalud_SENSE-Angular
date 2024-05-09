@@ -44,6 +44,9 @@ export class TareaService {
       console.log("Audio subido");
       this.actualizarTareas();
     });
+  }
 
+  public modificarTarea(tarea: Tarea) {
+    return this.httpClient.put(environment.apiUrl + "tareas/" + tarea.id + "/", {"nombre": tarea.nombre, "prioridad": tarea.prioridad});
   }
 }

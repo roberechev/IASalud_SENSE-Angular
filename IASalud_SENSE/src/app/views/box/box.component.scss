@@ -180,6 +180,16 @@ label {
   width: 10px;
   margin: auto;
 }
+
+.action-column-modificar {
+  text-align: center;
+  width: 10px;
+  margin: auto;
+}
+.action-column-modificar button{
+  margin: 3px;
+}
+
 .action-column-eliminar {
   text-align: center;
   width: 50px;
@@ -191,6 +201,7 @@ label {
   .priority-column,
   .audio-column,
   .action-column-trancripcion,
+  .action-column-modificar,
   .action-column-eliminar {
     width: 100%; /* Cuando la ventana es más pequeña, cada columna ocupa el 100% del ancho de la tabla */
     display: flex;
@@ -204,6 +215,13 @@ label {
     width: 60px;
     margin: auto;
   }
+
+  .action-column-modificar {
+    text-align: center;
+    width: 60px;
+    margin: auto;
+  }
+  
   .action-column-eliminar {
     text-align: center;
     width: 60px;

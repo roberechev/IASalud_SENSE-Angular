@@ -8,6 +8,8 @@ import { HospitalService } from './services/hospital.service';
 import { SensorService } from './services/sensor.service';
 import { Sensor } from './models/sensor';
 import { environment } from '../environments/environment';
+import { BoxService } from './services/box.service';
+import { Box } from './models/box';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +22,7 @@ import { environment } from '../environments/environment';
 export class AppComponent {
 
 constructor(private router: Router, private usuarioService: UsuarioService, private hospitalService: HospitalService, 
-  private sensorService: SensorService) {}
+  private sensorService: SensorService, private boxService: BoxService) {}
 
 ngOnInit() {
   this.comprobarToken();
@@ -51,9 +53,14 @@ public comprobarToken() {
     this.hospitalService.getTokenThingsboardAPI().subscribe((data: any) => {
       //console.info('---------Token Thingsboard:', data.token);
       this.hospitalService.guardarTokenThingsboard(data.token)
-      this.sensorService.getSensores().subscribe((dataSensores: any) => {
-        let filtroSensores = dataSensores.filter((sensor: Sensor) => sensor != null);
-        WebSocketAPIExample(this.hospitalService.getTokenThingsboard()!, filtroSensores, this.sensorService);
+      this.boxService.getBoxes().subscribe((dataBoxes: any) => {
+        dataBoxes.forEach((box: any) => {
+          let filtroSensores = box.sensores.filter((sensor: Sensor) => sensor != null);
+          if (filtroSensores != null && filtroSensores != undefined){
+            console.log('Sensores de la box:', filtroSensores[0].nombre);
+            WebSocketAPIExample(this.hospitalService.getTokenThingsboard()!, filtroSensores, this.sensorService, box);
+          }
+        });
       });
       // this.hospitalService.getDispositivosThingsboard().subscribe((dataIds: any) => { 
       //   //get bd boxes
@@ -145,11 +152,12 @@ jQuery(document).ready(function ($) {
   WEB SOCKET THINGSBOARD 
   -------------------------------------------------------------------------------------
   */
-  function WebSocketAPIExample(tokenThingsboard: string, dispositivos: Sensor[], sensorService: SensorService) {
+  function WebSocketAPIExample(tokenThingsboard: string, dispositivos: Sensor[], sensorService: SensorService, box: Box) {
     // var entityIds = ["6f9c11c0-deda-11ee-82da-4d2b8f4eb4f7", "6f9ef7f0-deda-11ee-82da-4d2b8f4eb4f7"];
     
     // var webSocket = new WebSocket("ws://localhost:8080/api/ws");
     var webSocket = new WebSocket(environment.shoketUrlTH);
+    var messageCount = 0;
   
     webSocket.onopen = function () {
       var authCmd = {
@@ -176,10 +184,12 @@ jQuery(document).ready(function ($) {
     };
   
     webSocket.onmessage = function (event) {
+      console.log("numero: " + messageCount);
+      console.log("box: " + box.nombre);
       var received_msg = event.data;
-      //console.log(event)
       console.log("Message is received: " + received_msg);
-      sensorService.cargarNuevoDato(received_msg);
+      sensorService.cargarNuevoDato(received_msg, messageCount, box);
+      messageCount++;
     };
   
     webSocket.onclose = function (event) {

@@ -93,8 +93,8 @@
     <h2 class="tituloBox tituloTareas" id="tituloTareas">Tareas del Box: {{ boxSeleccionado==null?"":boxSeleccionado.nombre }}  NHC: {{boxSeleccionado==null?"":(boxSeleccionado.paciente==null?"":boxSeleccionado.paciente.numero_historia) }}</h2>
     
     <div class="opcionesTablaTareas" *ngIf="true">
-      <button class="btn btn-primary" (click)="abrirAddAudioTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nuevo Audio</button>
-      <button class="btn btn-primary" (click)="abrirAddTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nueva Tarea</button>
+      <button class="btn btn-primary" (click)="abrirAddAudioTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nuevo Tarea</button>
+      <!--<button class="btn btn-primary" (click)="abrirAddTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nueva Tarea</button>-->
     </div>
     
     <div class="table-responsive">
@@ -103,10 +103,20 @@
           <!-- Iteración sobre cada tarea para mostrarlas en la tabla -->
           <tr *ngFor="let tarea of tareasOrdenadas" class="align-middle cada_tarea">
             <!-- Nombre de la tarea -->
-            <td class="task-column">{{ cargarNombreTarea(tarea) }}</td>
+            <td class="task-column" *ngIf="modoEdicion != -1 && tarea.id == modoEdicion">
+              <input type="text" id="nombreModificacion" name="nombreModificacion" [(ngModel)]="nombreModificacion" class="form-control">
+            </td>
+            <td class="task-column" *ngIf="tarea.id != modoEdicion">{{ cargarNombreTarea(tarea) }}</td>
             
             <!-- Prioridad de la tarea -->
-            <td class="priority-column">
+            <td class="priority-column" *ngIf="modoEdicion != -1 && tarea.id == modoEdicion">
+              <select class="form-select" [(ngModel)]="prioridadModificacion" id="prioridad" name="prioridad" required>
+                <option value="1">High</option>
+                <option value="2">Medium</option>
+                <option value="3" selected>Low</option>
+              </select>
+            </td>
+            <td class="priority-column" *ngIf="tarea.id != modoEdicion">
               <div class="d-inline-block rounded-pill p-1"
                    [ngClass]="{
                     'bg-rojo': tarea.prioridad == 1,
@@ -136,12 +146,26 @@
             </td>
             <td *ngIf="!comprobacionAudioParaTrancripcion(tarea.audio_recordatorio!)" id="transcripcionBlanco" class="action-column-trancripcion"></td>
             
+            <!-- Botón para la modificación -->
+            <td class="action-column-modificar">
+              <button class="btn btn-primary editarTarea" (click)="modoEdicionTarea(tarea)" *ngIf="modoEdicion == -1">
+                <i class="fa-solid fa-pencil"></i>
+              </button>
+              <button class="btn btn-primary guardarCambios" (click)="guardarCambiosTarea(tarea)" *ngIf="modoEdicion != -1 && tarea.id == modoEdicion">
+                <i class="fa-solid fa-check"></i>
+              </button>
+              <button class="btn btn-secondary cancelarCambios" (click)="cancelarModoEdicionTarea()" *ngIf="modoEdicion != -1 && tarea.id == modoEdicion">
+                <i class="fa-solid fa-x"></i>
+              </button>
+            </td>
+
             <!-- Botón para eliminar la tarea -->
             <td class="action-column-eliminar">
               <button class="btn btn-danger" (click)="eliminarTarea(tarea.id!)">
                 <i class="fa-solid fa-x"></i>
               </button>
             </td>
+            
           </tr>
         </tbody>
       </table>
