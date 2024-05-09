@@ -3,14 +3,14 @@
         <div class="container">
             <div class="form-horizontal">
                 <span class="heading" *ngIf="!isAdminLogin">Log In</span>
-                <span class="heading" *ngIf="isAdminLogin">Admin</span>
+                 <!--<span class="heading" *ngIf="isAdminLogin">Admin</span>-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="username_user" placeholder="Username">
                     <input type="password" class="form-control" id="password_user" placeholder="Password">
                 </div>
                 <div class="form-group">
-                    <p *ngIf="!isAdminLogin">Login como <a class="resaltar puntero" (click)="btnCambioUser()">admin</a></p>
-                    <p *ngIf="isAdminLogin">Login como <a class="resaltar puntero" (click)="btnCambioUser()">user</a></p>
+                    <!-- <p *ngIf="!isAdminLogin">Login como <a class="resaltar puntero" (click)="btnCambioUser()">admin</a></p>
+                    <p *ngIf="isAdminLogin">Login como <a class="resaltar puntero" (click)="btnCambioUser()">user</a></p>-->
                     <button class="btn" (click)="obtenerDatosLogin()">Login</button>
                 </div>
             </div>

@@ -96,7 +96,7 @@ export class HomeComponent {
         } 
 
         if (sensor != null && sensor != undefined){
-          this.boxService.obtenerDispositivosThingsboard(sensor, parseInt(idBox)).subscribe((data: any) => {
+          this.boxService.obtenerDispositivosThingsboard(sensor, parseInt(idBox), "-1").subscribe((data: any) => {
 
             if (data.glucose != undefined && data.glucose != null) {
               this.graficaGlucosa[idBox] = {

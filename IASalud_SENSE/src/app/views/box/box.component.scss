@@ -37,7 +37,9 @@ body, html {
   text-align: center;
 }
 
-.btn {
+
+
+.btnPrimarioAntiguo {
   color: #fff;
   border-radius: 100%;
   cursor: pointer;
@@ -120,6 +122,17 @@ label {
   max-width: calc(50% - 10px);
   overflow-y: auto;
 }
+
+
+.custom-input {
+  border: 2px solid purple;
+  margin-right: 20px;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(40%) sepia(92%) saturate(500%) hue-rotate(260deg) brightness(60%) contrast(120%);
+}
+
 
 @media (max-width: 768px) {
   .chart-container {

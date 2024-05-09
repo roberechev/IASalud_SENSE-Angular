@@ -12,10 +12,10 @@
 
   <div class="checkbox-container">
     <div class="centrado">
-      <button class="btn btn-primary" (click)="scrollToTareas()">Ver tareas</button>
+      <button class="btn btn-primary btnPrimarioAntiguo" (click)="scrollToTareas()">Ver tareas</button>
     </div>
     <div class="centrado">
-      <button class="btn btn-primary" id="btnAjustesSeleccionadosID" (click)="ajustesSeleccionados = !ajustesSeleccionados"><i class="fa-solid fa-gear"></i></button>
+      <button class="btn btn-primary btnPrimarioAntiguo" id="btnAjustesSeleccionadosID" (click)="ajustesSeleccionados = !ajustesSeleccionados"><i class="fa-solid fa-gear"></i></button>
     </div>
   </div>
 
@@ -37,6 +37,11 @@
         <input type="checkbox" id="glucosa" [(ngModel)]="mostrarGraficaGlucosa" (change)="guardarGraficasSeleccionadas()">
         <label for="glucosa">Glucosa</label>
       </div>
+    </div>
+
+    <div class="select-container">
+      <input class="custom-input" type="datetime-local" id="dateTimeInput" [(ngModel)]="fechaSeleccionada">
+      <button class="btn btn-primary" (click)="mostrarFecha()">Cargar fecha en gráficas</button>
     </div>
 
     <div class="select-container">
@@ -93,7 +98,7 @@
     <h2 class="tituloBox tituloTareas" id="tituloTareas">Tareas del Box: {{ boxSeleccionado==null?"":boxSeleccionado.nombre }}  NHC: {{boxSeleccionado==null?"":(boxSeleccionado.paciente==null?"":boxSeleccionado.paciente.numero_historia) }}</h2>
     
     <div class="opcionesTablaTareas" *ngIf="true">
-      <button class="btn btn-primary" (click)="abrirAddAudioTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nuevo Tarea</button>
+      <button class="btn btn-primary btnPrimarioAntiguo" (click)="abrirAddAudioTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nuevo Tarea</button>
       <!--<button class="btn btn-primary" (click)="abrirAddTarea()"><i class="fa-solid fa-plus aniadirTarea"></i> Nueva Tarea</button>-->
     </div>
     
@@ -140,7 +145,7 @@
             
             <!-- Botón para mostrar la transcripción -->
             <td *ngIf="comprobacionAudioParaTrancripcion(tarea.audio_recordatorio!)" class="action-column-trancripcion">
-              <button class="btn btn-primary" (click)="abrirDialogoTranscripcion(tarea.id!)">
+              <button class="btn btn-primary btnPrimarioAntiguo" (click)="abrirDialogoTranscripcion(tarea.id!)">
                 <i class="fa-solid fa-file-lines"></i>
               </button>
             </td>
@@ -148,20 +153,20 @@
             
             <!-- Botón para la modificación -->
             <td class="action-column-modificar">
-              <button class="btn btn-primary editarTarea" (click)="modoEdicionTarea(tarea)" *ngIf="modoEdicion == -1">
+              <button class="btn btn-primary btnPrimarioAntiguo editarTarea" (click)="modoEdicionTarea(tarea)" *ngIf="modoEdicion == -1">
                 <i class="fa-solid fa-pencil"></i>
               </button>
-              <button class="btn btn-primary guardarCambios" (click)="guardarCambiosTarea(tarea)" *ngIf="modoEdicion != -1 && tarea.id == modoEdicion">
+              <button class="btn btn-primary btnPrimarioAntiguo guardarCambios" (click)="guardarCambiosTarea(tarea)" *ngIf="modoEdicion != -1 && tarea.id == modoEdicion">
                 <i class="fa-solid fa-check"></i>
               </button>
-              <button class="btn btn-secondary cancelarCambios" (click)="cancelarModoEdicionTarea()" *ngIf="modoEdicion != -1 && tarea.id == modoEdicion">
+              <button class="btn btn-secondary btnPrimarioAntiguo cancelarCambios" (click)="cancelarModoEdicionTarea()" *ngIf="modoEdicion != -1 && tarea.id == modoEdicion">
                 <i class="fa-solid fa-x"></i>
               </button>
             </td>
 
             <!-- Botón para eliminar la tarea -->
             <td class="action-column-eliminar">
-              <button class="btn btn-danger" (click)="eliminarTarea(tarea.id!)">
+              <button class="btn btn-danger btnPrimarioAntiguo" (click)="eliminarTarea(tarea.id!)">
                 <i class="fa-solid fa-x"></i>
               </button>
             </td>

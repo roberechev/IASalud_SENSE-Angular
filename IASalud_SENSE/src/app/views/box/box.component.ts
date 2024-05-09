@@ -63,6 +63,7 @@ export class BoxComponent {
   modoEdicion: number = -1;
   nombreModificacion: string = "";
   prioridadModificacion: number = 3;
+  fechaSeleccionadaString: string = "-1";
 
   // Fin AUDIO
   cargando: boolean = false;
@@ -91,7 +92,7 @@ export class BoxComponent {
     this.cargarBoxIicialmente();
     // Render component inside root element
     this.sensorService.actualizacion$.subscribe((data: Date) => {
-      this.cargaSensoresThingsboard();
+      this.cargaSensoresThingsboard(this.fechaSeleccionadaString);
     });
 
     this.boxService.cambiosEnCombobox$.subscribe(() => {
@@ -425,7 +426,7 @@ public getDataGlucosa(sensor: any) {
       this.boxService.obtenerUnBox(id_box).subscribe((data: Box) => {
         this.boxSeleccionado = data;
         this.boxSeleccionado.sensores = this.boxSeleccionado.sensores.filter(sensor => sensor != null);
-        this.cargaSensoresThingsboard();
+        this.cargaSensoresThingsboard(this.fechaSeleccionadaString);
         this.obtenerTareasOrdenadas();
         this.obtenerGraficasSeleccionadas();
       })
@@ -438,13 +439,14 @@ public getDataGlucosa(sensor: any) {
       this.boxSeleccionado.sensores = this.boxSeleccionado.sensores.filter(sensor => sensor != null);
       // console.log("--------------------" + this.boxSeleccionado.tareas[0].nombre);
       this.obtenerTareasOrdenadas();
-      this.cargaSensoresThingsboard();
+      this.cargaSensoresThingsboard(this.fechaSeleccionadaString);
     });
   }
 
-  public cargaSensoresThingsboard() {
+  
+  public cargaSensoresThingsboard(fechaSeleccionada: String) {
     this.boxSeleccionado.sensores.forEach(sensor => {
-      this.boxService.obtenerDispositivosThingsboard(sensor, this.boxSeleccionado.id!).subscribe((data: any) => {
+      this.boxService.obtenerDispositivosThingsboard(sensor, this.boxSeleccionado.id!, fechaSeleccionada).subscribe((data: any) => {
         this.datosThingsboard.set(sensor.id_dispositivo_th, data);
         //console.log("datos de thingsboard: " + data); //toda la data
         this.cargarTodasGraficas();
@@ -551,6 +553,14 @@ public getDataGlucosa(sensor: any) {
     }else{
       return true;
     }
+  }
+
+
+  fechaSeleccionada: Date = new Date();
+  public mostrarFecha() {
+    let milisegundos = new Date(this.fechaSeleccionada).getTime();
+    this.fechaSeleccionadaString = milisegundos.toString();
+    this.cargaSensoresThingsboard(this.fechaSeleccionadaString);
   }
 
   public abrirDialogoTranscripcion(idTarea: number) {
