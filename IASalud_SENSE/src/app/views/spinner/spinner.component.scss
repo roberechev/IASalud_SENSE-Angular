@@ -15,17 +15,22 @@ body {
 	background-color: var(--bg);
 	color: var(--fg);
 	font: 1em/1.5 sans-serif;
-	height: 100vh;
+	height: 100%;
+	width: 100%;
 	display: grid;
 	place-items: center;
 	transition: background-color var(--trans-dur);
 }
 main {
-	padding: 1.5em 0;
+	//padding: 1.5em 0;
+	height: 100%;
+	width: 100%;
 }
 .ip {
-	width: 16em;
-	height: 8em;
+	//width: 16em;
+	//height: 8em;
+	width: 100%;
+	height: 100%;
 }
 .ip__track {
 	stroke: hsl(var(--hue),90%,90%);

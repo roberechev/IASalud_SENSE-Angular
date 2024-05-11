@@ -17,6 +17,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { TareaService } from '../../services/tarea.service';
 import { AgChartsAngularModule } from 'ag-charts-angular';
 import { AgChartOptions } from 'ag-charts-community';
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { set } from '@botpress/sdk';
 
 
 interface IDataFechaNumero {
@@ -27,7 +29,7 @@ interface IDataFechaNumero {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, FormsModule, AgChartsAngularModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, FormsModule, AgChartsAngularModule, SpinnerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -37,6 +39,7 @@ export class HomeComponent {
   boxes: Box[] = [];
   horaModificacion: string = '';
   graficaGlucosa: { [idBox: string]: AgChartOptions } = {};
+  spinerActive: boolean = false;
 
   // dispositivos: Record<string, string> = {};
 
@@ -48,7 +51,7 @@ export class HomeComponent {
       this.horaModificacion = this.formatDate(data);
     });
     this.tareaService.actualizacionTareas$.subscribe(() => {
-      this.obtenerBoxes();
+      this.obtenerBoxesParaActualizarTareas();
     });
   }
 
@@ -73,12 +76,24 @@ export class HomeComponent {
     private tareaService: TareaService) { }
 
   public obtenerBoxes() {
+    this.spinerActive = true;
     this.boxService.getBoxes().subscribe((data: Box[]) => {
       this.boxes = data.filter(box => box != null);
       this.boxes.forEach(box => {
         let filtroSensores = box.sensores.filter(box => box != null);
         this.cargarGraficaGlucosa((box.id!).toString(), filtroSensores);
+        
       });
+    });
+  }
+
+  public obtenerBoxesParaActualizarTareas() {
+    this.spinerActive = true;
+    this.boxService.getBoxes().subscribe((data: Box[]) => {
+      this.boxes = data.filter(box => box != null);
+      setTimeout(() => {
+        this.spinerActive = false;
+      }, 2000);
     });
   }
 
@@ -148,6 +163,7 @@ export class HomeComponent {
 
       });
     }
+    this.spinerActive = false;
   }
 
   public getDataGlucosa(sensor: any) {

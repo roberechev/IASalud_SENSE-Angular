@@ -12,6 +12,15 @@ h2 {
 .btn {
     min-width: 120px; /* Ancho mínimo ajustable según tus necesidades */
 }
+
+.btn-secondary{
+    background-color: #6c757d;
+}
+
+.btn-primary{
+    background-color: #0d6efd;
+}
+
 /*
 .customDialogAddTarea {
     border: 2px solid red !important;

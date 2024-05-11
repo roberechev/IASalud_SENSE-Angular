@@ -4,6 +4,14 @@ body, html {
   height: 100%;
 }
 
+h1 {
+  font-size: xx-large;
+}
+h2 {
+  font-size: x-large;
+
+}
+
 .tituloBox {
   text-align: center;
   font-weight: bold;
@@ -37,11 +45,9 @@ body, html {
   text-align: center;
 }
 
-
-
 .btnPrimarioAntiguo {
   color: #fff;
-  border-radius: 100%;
+  border-radius: 25px;
   cursor: pointer;
 }
 
@@ -79,6 +85,22 @@ input[type="checkbox"] {
 
 label {
   font-weight: bold; /* Hace que las etiquetas sean negritas */
+}
+
+// SPINNER
+
+.spinner {
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(255, 234, 250, 0.5);
+  text-align: center;
+  align-content: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  z-index: 999;
+  position: fixed;
 }
 
 // Graficas

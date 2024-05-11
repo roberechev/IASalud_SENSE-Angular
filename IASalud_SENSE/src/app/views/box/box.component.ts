@@ -11,6 +11,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { VerTranscripcionDialogComponentComponent } from '../ver-transcripcion-dialog-component/ver-transcripcion-dialog-component.component';
 import { ComboboxPacientesComponent } from '../combobox-pacientes/combobox-pacientes.component';
 import { ComboboxDispositivosComponent } from '../combobox-dispositivos/combobox-dispositivos.component';
+import { SpinnerComponent } from '../spinner/spinner.component';
 //graficos
 import { AgChartsAngularModule } from 'ag-charts-angular';
 import { AgChartOptions } from 'ag-charts-community';
@@ -50,7 +51,7 @@ interface IDataFechaNumero {
 @Component({
   selector: 'app-box',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, AgChartsAngularModule, FormsModule, ComboboxPacientesComponent, ComboboxDispositivosComponent],
+  imports: [CommonModule, RouterOutlet, RouterLink, AgChartsAngularModule, FormsModule, ComboboxPacientesComponent, ComboboxDispositivosComponent, SpinnerComponent],
   //template: '<ag-charts-angular [options]="chartOptions"/>',
   templateUrl: './box.component.html',
   styleUrl: './box.component.scss'
@@ -64,6 +65,7 @@ export class BoxComponent {
   nombreModificacion: string = "";
   prioridadModificacion: number = 3;
   fechaSeleccionadaString: string = "-1";
+  spinerActive: boolean = false;
 
   // Fin AUDIO
   cargando: boolean = false;
@@ -421,6 +423,7 @@ public getDataGlucosa(sensor: any) {
 
   
   public cargarBoxIicialmente() {
+    this.spinerActive = true;
     this.sub = this.activatedRoute.params.subscribe(params => {
       const id_box = +params['id']; // (+) converts string 'id' to a number
       this.boxService.obtenerUnBox(id_box).subscribe((data: Box) => {
@@ -429,6 +432,7 @@ public getDataGlucosa(sensor: any) {
         this.cargaSensoresThingsboard(this.fechaSeleccionadaString);
         this.obtenerTareasOrdenadas();
         this.obtenerGraficasSeleccionadas();
+        this.spinerActive = false;
       })
     });
   }

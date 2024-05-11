@@ -41,6 +41,22 @@ margin: 0; /* Elimina el margen predeterminado del h4 */
 }
 
 
+// SPINNER
+
+.spinner {
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(177, 227, 252, 0.4);
+  text-align: center;
+  align-content: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  z-index: 999;
+  position: fixed;
+}
+
 /*
 --------------------------------
   Estilos de la lista de tareas

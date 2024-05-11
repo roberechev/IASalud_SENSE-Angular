@@ -54,10 +54,11 @@ public comprobarToken() {
       //console.info('---------Token Thingsboard:', data.token);
       this.hospitalService.guardarTokenThingsboard(data.token)
       this.boxService.getBoxes().subscribe((dataBoxes: any) => {
-        dataBoxes.forEach((box: any) => {
+        let boxes = dataBoxes.filter((box: Box) => box != null);
+        boxes.forEach((box: any) => {          
           let filtroSensores = box.sensores.filter((sensor: Sensor) => sensor != null);
           if (filtroSensores != null && filtroSensores != undefined){
-            console.log('Sensores de la box:', filtroSensores[0].nombre);
+            //console.log('Sensores de la box:', filtroSensores[0].nombre);
             WebSocketAPIExample(this.hospitalService.getTokenThingsboard()!, filtroSensores, this.sensorService, box);
           }
         });
