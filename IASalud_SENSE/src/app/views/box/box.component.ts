@@ -506,8 +506,8 @@ public getDataGlucosa(sensor: any) {
 
   public abrirAddAudioTarea() {
     let dialogRef = this.dialog.open(AddAudioTareaDialogComponentComponent, {
-      height: '50%',
-      maxHeight: '450px',
+      height: '60%',
+      maxHeight: '800px',
       width: '50%',
       maxWidth: '620px', 
       data: { box: this.boxSeleccionado},
@@ -568,9 +568,11 @@ public getDataGlucosa(sensor: any) {
   }
 
   public abrirDialogoTranscripcion(idTarea: number) {
+    this.spinerActive = true;
     this.cargando = true;
     this.boxService.transcripcionAudio(idTarea).subscribe((data: any) => {
       //console.log(data);
+      this.spinerActive = false;
       this.cargando = false;
       let dialogRef = this.dialog.open(VerTranscripcionDialogComponentComponent, {
         height: '50%',

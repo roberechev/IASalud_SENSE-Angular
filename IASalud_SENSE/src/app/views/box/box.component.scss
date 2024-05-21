@@ -89,19 +89,19 @@ label {
 
 // SPINNER
 
-.spinner {
-  height: 100vh;
-  width: 100%;
-  background-color: rgba(255, 234, 250, 0.5);
-  text-align: center;
-  align-content: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 1;
-  z-index: 999;
-  position: fixed;
-}
+// .spinner {
+//   height: 100vh;
+//   width: 100%;
+//   background-color: rgba(255, 234, 250, 0.5);
+//   text-align: center;
+//   align-content: center;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   opacity: 1;
+//   z-index: 999;
+//   position: fixed;
+// }
 
 // Graficas
 
@@ -200,7 +200,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   word-wrap: break-word; /* Permite que el contenido de las celdas se divida en varias líneas si es necesario */
 }
 .cada_tarea{
-  border: 2px solid purple;
+  border: 2px solid #919393;
 }
 
 .d-inline-block {

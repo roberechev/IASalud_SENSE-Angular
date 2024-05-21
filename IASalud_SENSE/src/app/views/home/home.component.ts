@@ -47,7 +47,7 @@ export class HomeComponent {
     this.obtenerBoxes();
     // Suscribirse al Subject para recibir eventos de actualización
     this.sensorService.actualizacion$.subscribe((data: Date) => {
-      this.obtenerBoxes();
+      this.obtenerBoxesSinSpinner();
       this.horaModificacion = this.formatDate(data);
     });
     this.tareaService.actualizacionTareas$.subscribe(() => {
@@ -86,6 +86,16 @@ export class HomeComponent {
       });
     });
   }
+  public obtenerBoxesSinSpinner() {
+    this.boxService.getBoxes().subscribe((data: Box[]) => {
+      this.boxes = data.filter(box => box != null);
+      this.boxes.forEach(box => {
+        let filtroSensores = box.sensores.filter(box => box != null);
+        this.cargarGraficaGlucosa((box.id!).toString(), filtroSensores);
+      });
+    });
+  }
+  
 
   public obtenerBoxesParaActualizarTareas() {
     this.spinerActive = true;

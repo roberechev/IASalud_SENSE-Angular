@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-front
+  labels:
+    app: angular-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular-front
+  template:
+    metadata:
+      labels:
+        app: angular-front
+    spec:
+      containers:
+        - name: angular-kube
+          image: liansalmeron/libritalfront:latest
+          command: ["ng", "serve", "--host", "0.0.0.0", "--port", "80"]
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 80

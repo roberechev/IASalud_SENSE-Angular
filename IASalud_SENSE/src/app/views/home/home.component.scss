@@ -4,14 +4,11 @@
   border-radius: 20px;
 }
 
-.inner-card {
-margin-top: 2%; /* Espacio entre las secciones internas */
-border: 2px solid purple; /* Borde de las secciones internas */
-border-radius: 40px;
-}
+
 .inner-card {
   margin-top: 2%; /* Espacio entre las secciones internas */
   border: 2px solid purple; /* Borde de las secciones internas */
+  //border: 2px solid #919393;
   border-radius: 40px;
   overflow: auto; /* Agrega esta línea para controlar el desbordamiento */
 }
@@ -29,6 +26,9 @@ margin: 0; /* Elimina el margen predeterminado del h3 */
 .inner-card-body h6 {
 margin: 0; /* Elimina el margen predeterminado del h4 */
 }
+.ultimoRegistro{
+  font-size: px;
+}
 
 .fa-temperature-three-quarters {
   color: rgb(170, 24, 24); /* Cambia el color del icono */
@@ -41,21 +41,23 @@ margin: 0; /* Elimina el margen predeterminado del h4 */
 }
 
 
+
 // SPINNER
 
-.spinner {
-  height: 100vh;
-  width: 100%;
-  background-color: rgba(177, 227, 252, 0.4);
-  text-align: center;
-  align-content: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 1;
-  z-index: 999;
-  position: fixed;
-}
+// .spinner {
+//   height: 100vh;
+//   width: 100%;
+//  // background-color: rgba(177, 227, 252, 0.4);
+//   background-color: rgba(81, 255, 0, 0.4);
+//   text-align: center;
+//   align-content: center;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   opacity: 1;
+//   z-index: 999;
+//   position: fixed;
+// }
 
 /*
 --------------------------------

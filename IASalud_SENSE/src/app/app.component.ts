@@ -1,6 +1,7 @@
 import { Component, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { SpinnerComponent } from './views/spinner/spinner.component';
 
 import $ from 'jquery';
 import { UsuarioService } from './services/usuario.service';
@@ -14,20 +15,25 @@ import { Box } from './models/box';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, RouterOutlet, RouterLink, SpinnerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 
 export class AppComponent {
 
+ // isLoading: boolean = false;
+
 constructor(private router: Router, private usuarioService: UsuarioService, private hospitalService: HospitalService, 
   private sensorService: SensorService, private boxService: BoxService) {}
 
 ngOnInit() {
+  //this.isLoading = true;
+
   this.comprobarToken();
   setTimeout(() => { 
     navbar();
+    //this.isLoading = false;
   });
   //if (this.esUsuarioLogueado()){
   this.cargarTokenYSocketThingsboard();

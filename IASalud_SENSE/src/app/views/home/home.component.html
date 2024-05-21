@@ -1,4 +1,4 @@
-<div class="spinner"  *ngIf="spinerActive">
+<div class="spinner" *ngIf="spinerActive">
   <app-spinner></app-spinner>
 </div>
 
@@ -25,13 +25,14 @@
                 <p>{{ sensor.id_dispositivo_th }}</p>-->
                 <div *ngFor="let valor of obtenerUltimosValores(sensor)">
                   <!--<p>{{ valor.id }}</p>-->
-                  <h6 *ngIf="valor.unidades!='color'"><i class="fa-solid fa-temperature-three-quarters" *ngIf="valor.unidades=='ºC'"></i> 
+                  <h6 *ngIf="valor.unidades!='color'">
+                    <i class="fa-solid fa-temperature-three-quarters" *ngIf="valor.unidades=='ºC'"></i> 
                     <i class="fa-solid fa-droplet" *ngIf="valor.unidades=='%'"></i>
                     <i class="fa-solid fa-eye-dropper" *ngIf="valor.unidades=='diuresis'"></i>
                     {{ valor.valor }}</h6>
                     <h6 *ngIf="valor.unidades=='color'"><i class="fa-solid fa-droplet" [style.color]="getColor(valor.tipo)"></i> {{ valor.valor }} </h6>
                 </div>
-                <p *ngIf="comprobarDiuresis(box, sensor)"><i class="fa-solid fa-signal"></i> ult. {{ cargaFechaUltimoRegistroSensor(sensor) }}</p>                
+                <p *ngIf="comprobarDiuresis(box, sensor)" class="ultimoRegistro"><i class="fa-solid fa-signal"></i> ult. {{ cargaFechaUltimoRegistroSensor(sensor) }}</p>                
               </div>
 
             </div>

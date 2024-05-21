@@ -73,6 +73,8 @@ export class SensorService {
         }));
         if (parseFloat(registro.valor) > 32 && messageCount > 0){
           this.toastSvc.warning('Temperatura alta: ' + registro.valor + " ºC", 'Alerta box: ' + box.nombre);
+        } else if (parseFloat(registro.valor) < 20 && messageCount > 0){
+          this.toastSvc.warning('Temperatura baja: ' + registro.valor + " ºC", 'Alerta box: ' + box.nombre);
         }
         //console.log("Temperatura: " + jsonObject.data.temperature[0][1]);
         bandera = true;
@@ -89,6 +91,8 @@ export class SensorService {
       }));
       if (parseFloat(registro.valor) > 86 && messageCount > 0){
         this.toastSvc.warning('Humedad alta: ' + registro.valor + " %", 'Alerta box: ' + box.nombre);
+      } else if (parseFloat(registro.valor) < 60 && messageCount > 0){
+        this.toastSvc.warning('Humedad baja: ' + registro.valor + " %", 'Alerta box: ' + box.nombre);
       }
         //console.log("Humedad: " + jsonObject.data.humidity[0][1]);
         bandera = true;
