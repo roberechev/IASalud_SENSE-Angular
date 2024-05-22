@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
         - name: angular-kube
-          image: liansalmeron/libritalfront:latest
-          command: ["ng", "serve", "--host", "0.0.0.0", "--port", "80"]
+          image: roberechev/angularfrontend:latest
           imagePullPolicy: Always
           ports:
           - containerPort: 80
